@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Andy&#39;s Blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="從零開始五子棋AI學習筆記完成後將會發布至 (https://andy112247.github.io)
+tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
+寫下我的學習過程希望能幫助跟我一樣都是新手的人至於為甚麼會想寫五子棋AI程式呢?因為 詳情為甚麼說是從零開始呢?因為小弟程式廢渣，也沒接觸過AI更別提AlphaBeta還是MinMax演算法…連">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Andy's Blog">
+<meta property="og:url" content="https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/index.html">
+<meta property="og:site_name" content="Andy's Blog">
+<meta property="og:description" content="從零開始五子棋AI學習筆記完成後將會發布至 (https://andy112247.github.io)
+tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
+寫下我的學習過程希望能幫助跟我一樣都是新手的人至於為甚麼會想寫五子棋AI程式呢?因為 詳情為甚麼說是從零開始呢?因為小弟程式廢渣，也沒接觸過AI更別提AlphaBeta還是MinMax演算法…連">
+<meta property="og:image" content="http://i.imgur.com/2ajMyg9.jpg">
+<meta property="og:image" content="http://i.imgur.com/zhYbywj.jpg">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/9/91/AB_pruning.svg">
+<meta property="og:image" content="https://i.imgur.com/vYatF8t.gif">
+<meta property="og:image" content="https://i.imgur.com/Kxkz3lX.png">
+<meta property="og:image" content="https://i.imgur.com/YyOZK2m.png">
+<meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/9/91/AB_pruning.svg">
+<meta property="og:updated_time" content="2017-01-25T13:40:29.513Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Andy's Blog">
+<meta name="twitter:description" content="從零開始五子棋AI學習筆記完成後將會發布至 (https://andy112247.github.io)
+tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
+寫下我的學習過程希望能幫助跟我一樣都是新手的人至於為甚麼會想寫五子棋AI程式呢?因為 詳情為甚麼說是從零開始呢?因為小弟程式廢渣，也沒接觸過AI更別提AlphaBeta還是MinMax演算法…連">
+<meta name="twitter:image" content="http://i.imgur.com/2ajMyg9.jpg">
+  
+    <link rel="alternative" href="/atom.xml" title="Andy&#39;s Blog" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/img/favicon.png">
+  
+  
+      <link rel="stylesheet" href="//cdn.bootcss.com/animate.css/3.5.0/animate.min.css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/font-awesome/css/font-awesome.min.css">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  
+  
+      <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  
+  <!-- 加载特效 -->
+    <script src="/js/pace.js"></script>
+    <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
+  <script>
+      var yiliaConfig = {
+          rootUrl: '/',
+          fancybox: true,
+          animate: true,
+          isHome: false,
+          isPost: true,
+          isArchive: false,
+          isTag: false,
+          isCategory: false,
+          open_in_new: false
+      }
+  </script>
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            
+            <img lazy-src="/img/andy.png" class="js-avatar">
+            
+        </a>
+
+        <hgroup>
+          <h1 class="header-author"><a href="/" title="Hi Mate">Andy</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">寫下學習路途的風景</p>
+        
+        
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/Home">部落格首頁</a></li>
+                        
+                            <li><a href="/works">作品展示</a></li>
+                        
+                            <li><a href="/about">留言打卡</a></li>
+                        
+                            <li><a href="/FrontEndGuide">前端導航</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fl mail" target="_blank" href="/&#97;&#110;&#100;&#121;&#49;&#49;&#50;&#50;&#52;&#55;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;" title="mail">mail</a>
+                            
+                                <a class="fl github" target="_blank" href="https://github.com/andy112247" title="github">github</a>
+                            
+                                <a class="fl facebook" target="_blank" href="https://www.facebook.com/andy112247" title="facebook">facebook</a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a target="_blank" class="main-nav-link switch-friends-link" href="http://luuman.github.io/">name</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">寫下學習路途的風景</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="Me">Andy</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                
+                    <img lazy-src="/img/andy.png" class="js-avatar">
+                
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="Me">Andy</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">寫下學習路途的風景</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/Home">部落格首頁</a></li>
+                
+                    <li><a href="/works">作品展示</a></li>
+                
+                    <li><a href="/about">留言打卡</a></li>
+                
+                    <li><a href="/FrontEndGuide">前端導航</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <div class="social">
+                    
+                        <a class="mail" target="_blank" href="/&#97;&#110;&#100;&#121;&#49;&#49;&#50;&#50;&#52;&#55;&#64;&#103;&#109;&#97;&#105;&#108;&#46;&#99;&#111;&#109;" title="mail">mail</a>
+                    
+                        <a class="github" target="_blank" href="https://github.com/andy112247" title="github">github</a>
+                    
+                        <a class="facebook" target="_blank" href="https://www.facebook.com/andy112247" title="facebook">facebook</a>
+                    
+                </div>
+            </nav>
+        </header>                
+    </div>
+</nav>
+      <div class="body-wrap"><article id="post-從零開始五子棋AI學習筆記" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/25/從零開始五子棋AI學習筆記/" class="article-date">
+      <time datetime="2017-01-25T12:53:03.242Z" itemprop="datePublished">2017-01-25</time>
+</a>
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h1 id="從零開始五子棋AI學習筆記"><a href="#從零開始五子棋AI學習筆記" class="headerlink" title="從零開始五子棋AI學習筆記"></a>從零開始五子棋AI學習筆記</h1><p>完成後將會發布至 (<a href="https://andy112247.github.io">https://andy112247.github.io</a>)</p>
+<h6 id="tags-五子棋AI-AlphaBeta-MinMax-node-js"><a href="#tags-五子棋AI-AlphaBeta-MinMax-node-js" class="headerlink" title="tags: 五子棋AI AlphaBeta MinMax node.js"></a>tags: <code>五子棋AI</code> <code>AlphaBeta</code> <code>MinMax</code> <code>node.js</code></h6><p>這是我的第一個線上筆記^^</p>
+<p>寫下我的學習過程希望能幫助跟我一樣都是新手的人<br>至於為甚麼會想寫五子棋AI程式呢?因為 <a href="https://www.facebook.com/photo.php?fbid=1182458468516759&amp;set=a.203079396454676.44378.100002578513773&amp;type=3&amp;theater" target="_blank" rel="external">詳情</a><br>為甚麼說是從零開始呢?因為小弟<strong>程式廢渣</strong>，也沒接觸過AI更別提AlphaBeta還是MinMax演算法…連個OOXX還是DFS BFS都沒寫過Orz</p>
+<p><excerpt in="" index="" |="" 首页摘要=""><br>…<a id="more"></a></excerpt></p>
+<the rest="" of="" contents="" |="" 余下全文="">
+
+<h6 id="所以可能會有很多寫錯的地方…"><a href="#所以可能會有很多寫錯的地方…" class="headerlink" title="所以可能會有很多寫錯的地方…"></a>所以可能會有很多寫錯的地方…</h6><h1 id="目標"><a href="#目標" class="headerlink" title="目標"></a>目標</h1><ul>
+<li>利用node.js寫出線上對弈五子棋AI程式</li>
+<li>兩天內半從完全不會寫出人工智慧來!!!!!</li>
+</ul>
+<h1 id="演算法簡介"><a href="#演算法簡介" class="headerlink" title="演算法簡介"></a>演算法簡介</h1><h3 id="極小化極大算法-MaxMin演算法"><a href="#極小化極大算法-MaxMin演算法" class="headerlink" title="極小化極大算法(MaxMin演算法)"></a>極小化極大算法(MaxMin演算法)</h3><p><strong>用途:</strong><br>選擇將自己優勢最大化的選擇，另一方則選擇令對手優勢最小化的方法</p>
+<p><img src="http://i.imgur.com/2ajMyg9.jpg" alt=""></p>
+<p>列出所有可能的走法，就會形成一顆博弈樹，而一個走法(下法)稱為節點。<br>此演算法需要一個評分函數，才能判斷優劣，設此函數為:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">f(p) = (將p中所有空格都放上MAX的棋子後，MAX三子成線的總數) — (將p中所有空格都放上MIN的棋子後，MIN三子成線的總數)。</div></pre></td></tr></table></figure></p>
+<p>例如圖片上最左下角的算法為<br>xxx<br>oxx<br>xxx<br>此時x可以連成6條線<br>xoo<br>ooo<br>ooo<br>此時o可以連成5條線<br>分數即為(6)-(5)=1</p>
+<ol>
+<li><p>以空棋局為根節點，以某個棋局1步後的棋局的該棋局節點的子節點，廣度優先生成一棵博弈樹。然後從樹根開始輪流給每層結點賦予MAX和MIN的稱號。（本文限定博弈樹的深度為3，即只分析雙方各下一子的情況。）</p>
+</li>
+<li><p>使用評分函數 f( p) 計算各個葉子節點分值。</p>
+</li>
+<li><p><del>當葉子節點的分值計算出來後，再逆層向推算出各層非葉子節點的得分。推算的方法是：對於處於MAX層的節點，選其子節點中一個最大的得分作為該節點的得分，這是為了使自己在可供選擇的方案中選一個對自己最有利的方案；對處於MIN層的節點，選其子節點中一個最小的得分作為該節點的得分，這是為了立足於最壞的情況，這樣計算出的父節點的得分為倒推值。</del></p>
+</li>
+<li><p><del>如此反推至根節點下的第一層孩子，如果其中某個孩子能獲得在其兄弟節點中最大的倒推值，則它就是當前棋局最佳的走法。</del></p>
+</li>
+</ol>
+<p>3.4點<strong>白話一點</strong>就是:<br>父狀態在<strong>Min</strong>層，分數為孩子中最小的分數;<br>父狀態在<strong>Max</strong>層，分數為孩子中最大的分數。<br>(注意:AI應該設為自己為MAX層才會得到最佳狀態)</p>
+<p>可看出要是複雜一點(狀態較多)的遊戲，向下延伸的節點就會非常多，效率也不佳因此有了Alpha-beta剪枝演算法，此算法主要優點在於其在邊生成博弈樹時候邊計算評估各節點的倒推值，並且根據評估出的倒推值範圍，及時停止擴展那些已無必要再擴展的子節點，即相當於剪去了博弈樹上的一些分枝，從而節約了機器開銷，提高了搜索效率。</p>
+<p><strong>白話一點</strong>就是去除一些看起來已經會輸的下法，省去繼續推算他下面的節點。</p>
+<h3 id="Pseudocode"><a href="#Pseudocode" class="headerlink" title="Pseudocode:"></a>Pseudocode:</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"> <span class="function">function <span class="title">minimax</span><span class="params">(node, depth, maximizingPlayer)</span>    </span></div><div class="line"> <span class="comment">//(從某個結解開始,指定深度,哪個玩家?)</span></div><div class="line">     <span class="keyword">if</span> depth = <span class="number">0</span> or node is a terminal node</div><div class="line">     <span class="comment">//如果深度已經是0了或者是終端節點</span></div><div class="line">         <span class="keyword">return</span> the heuristic value of node</div><div class="line">         <span class="comment">//傳回已經下到那一層的盤面分數</span></div><div class="line"></div><div class="line">     <span class="keyword">if</span> maximizingPlayer</div><div class="line">     <span class="comment">//如果現在是我方(取最大值的那一方)(Player true=取大的;FALSE=取小的)</span></div><div class="line">         bestValue := −∞</div><div class="line">         <span class="comment">//bestValue設成負無限大(最爛)</span></div><div class="line">         <span class="keyword">for</span> each child of node</div><div class="line">             v := minimax(child, depth − <span class="number">1</span>, FALSE)</div><div class="line">             <span class="comment">//v=遞迴(子代，深度-1，玩家true=取大的;FALSE=取小的)</span></div><div class="line">             bestValue := max(bestValue, v)</div><div class="line">             <span class="comment">//一開始設付無限大，所以只要有任何一個值近來會等他就，然後如果下一個子代有更好max(bestValue,子代的分數)就取他</span></div><div class="line">         <span class="keyword">return</span> bestValue <span class="comment">//傳回bestValue</span></div><div class="line"></div><div class="line">     <span class="keyword">else</span> (* minimizing player *)</div><div class="line">         <span class="comment">//第一次遞迴後因為變成FALSE所以就會執行這裡</span></div><div class="line">         bestValue := +∞</div><div class="line">         <span class="keyword">for</span> each child of node</div><div class="line">             v := minimax(child, depth − <span class="number">1</span>, TRUE)</div><div class="line">             bestValue := min(bestValue, v)</div><div class="line">         <span class="keyword">return</span> bestValue</div><div class="line">         </div><div class="line">(* Initial call <span class="keyword">for</span> maximizing player *)</div><div class="line">minimax(origin, depth, TRUE)    <span class="comment">//TRUE是自己</span></div></pre></td></tr></table></figure>
+<p><br></p>
+<h3 id="Alpha-beta剪枝"><a href="#Alpha-beta剪枝" class="headerlink" title="Alpha-beta剪枝"></a>Alpha-beta剪枝</h3><p><strong>用途:</strong><br>減少搜尋樹的分枝，將搜尋時間用在「更有希望」的子樹上，繼而提升搜尋深度。<br>AlphaBeta修剪法其實是MinMax對局搜尋法的一個修改版，主要是在MinMax當中加入了 α 與 β 兩個紀錄值，用來做為是否要修剪的參考標準</p>
+<p><img src="http://i.imgur.com/zhYbywj.jpg" alt=""></p>
+<p><br></p>
+<ol>
+<li>對於一個MIN層節點，若能估計出其倒推值的上確界Beta，並且這個Beta值不大於其的父節點(MAX層節點)的估計倒推值的下確界Alpha，即Alpha≥Beta，則就不必再擴展該MIN節點的其餘子節點了，因為這些節點的估值對MIN父節點的倒推值已無任何影響了，這一過程稱為Alpha剪枝。 <strong>分析解讀中ing</strong> </li>
+</ol>
+<p><br><br><br>下面兩張圖片是一組的<br><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/AB_pruning.svg" alt=""></p>
+<p><img src="https://i.imgur.com/vYatF8t.gif" alt=""></p>
+<p>這是gif動圖喔!!他會<strong>慢慢</strong>講解<br>恩…真的很慢大概是要配合下面英文..花點時間看就會懂了</p>
+<p><br><br></p>
+<h3 id="陳鍾誠教授的影片講解"><a href="#陳鍾誠教授的影片講解" class="headerlink" title="陳鍾誠教授的影片講解:"></a>陳鍾誠教授的影片講解:</h3><p>感謝老師…</p>
+<div class="video-container"><iframe src="//www.youtube.com/embed/fB0J0ZrFo-I" frameborder="0" allowfullscreen></iframe></div>
+<p><br><br></p>
+<h3 id="Pseudocode-1"><a href="#Pseudocode-1" class="headerlink" title="Pseudocode:"></a>Pseudocode:</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"> <span class="function">function <span class="title">alphabeta</span><span class="params">(node, depth, α, β, maximizingPlayer)</span></span></div><div class="line">      <span class="keyword">if</span> depth = <span class="number">0</span> or node is a terminal node</div><div class="line">          <span class="keyword">return</span> the heuristic value of node</div><div class="line">      <span class="keyword">if</span> maximizingPlayer</div><div class="line">          v := -∞</div><div class="line">          <span class="keyword">for</span> each child of node</div><div class="line">              v := max(v, alphabeta(child, depth – <span class="number">1</span>, α, β, FALSE))</div><div class="line">              α := max(α, v)</div><div class="line">              <span class="keyword">if</span> β ≤ α</div><div class="line">              <span class="comment">//如果β ≤ α就break掉，break的話這個回圈就離開了，所以就會切掉很多後面的節點</span></div><div class="line">                  <span class="keyword">break</span> (* β cut-off *)</div><div class="line">                  <span class="comment">//這個叫做 β cut-off</span></div><div class="line">          <span class="keyword">return</span> v</div><div class="line">      <span class="keyword">else</span></div><div class="line">          v := ∞</div><div class="line">          <span class="keyword">for</span> each child of node</div><div class="line">              v := min(v, alphabeta(child, depth – <span class="number">1</span>, α, β, TRUE))</div><div class="line">              β := min(β, v)</div><div class="line">              <span class="keyword">if</span> β ≤ α</div><div class="line">                  <span class="keyword">break</span> (* α cut-off *)</div><div class="line">                  <span class="comment">//這個叫做 α cut-off</span></div><div class="line">          <span class="keyword">return</span> v</div><div class="line">         </div><div class="line">(* Initial call *)</div><div class="line">alphabeta(origin, depth, -∞, +∞, TRUE)</div><div class="line"><span class="comment">//一開始的α是設-∞，因為一開始是取大的才會一直提升，β反之亦然才會一直下降</span></div></pre></td></tr></table></figure>
+<p><br><br></p>
+<p>假設棋盤上的正中心已經下有一個棋子，那麼棋盤上還有224個可以放置的點位，那麼博弈樹搜索的第一層就需要擴展224個狀態節點；<br>    接下來，每個狀態節點都剩餘223個可放置棋子的位置，所以需要繼續擴展223個狀態節點，所以第二層會存在224 <em> 223個狀態節點；<br>    依次類推，第三層會有224 </em> 223 <em> 222個狀態節點；<br>    第四層會有224 </em> 223 <em> 222 </em> 221個狀態節點<br>    ……</p>
+<p>那麼如果我們就算到第四層，總共需要搜索到：<br>224 + 224 <em> 223 + 224 </em> 223 <em> 222 + 224 </em> 223 <em> 222 </em> 221 = 2 461 884 544<br>呵呵了。每次都要搜索如此多的狀態節點，這樣的開銷是十分可觀的，因此，我們提高效率的方式就鎖定到了：如何減少需要搜索的狀態節點。<br>α-β剪枝就是一種博弈算法中最常用的剪枝算法</p>
+<ul>
+<li><p>α剪枝：<br>  若任一極小值層節點的β值小於或等於它任一先輩極大值居節點的α值，即α（先輩層）≥β（後繼層），則可中止該極小值層中這個MIN節點以下的搜索過程。這個MIN節點最終的倒推值就確定為這個β值</p>
+</li>
+<li><p>β剪枝：<br>  若任一極大值層節點的α值大於或等於它任一先輩極小值層節點的β值，即α（後繼層）≥β（先輩層），則可以中止該極大值層中這個MAX節點以下的搜索過程。這個MAX節點的最終倒推值就確定為這個α值。</p>
+</li>
+</ul>
+<p>不用太仔細看定義而以直接從演算法或是下圖理解更快</p>
+<p><img src="https://i.imgur.com/Kxkz3lX.png" alt=""><br>這張神圖!配下面解釋慢慢看懂了!!</p>
+<p>簡單說一下：<br>帶圈的數字代表搜索節點的次序（博弈樹的搜索是DFS哦）；<br>最底層的數字代表狀態評估值，可以認為數字越大，對自己越有利，數字越小，對對方越有利。</p>
+<ol>
+<li>找到第一個狀態節點，返回估價為0給上一層</li>
+<li>這樣的話，上一層節點在擴展完其他節點之前就會知道，自己的估價值肯定不可能比0更高（因為要選擇最小的~）</li>
+<li>擴展了第二個狀態節點，返回估價為5</li>
+<li>此時上一層節點已經擴展完所有的子節點，因此按照博弈樹的原則，自己的估價就是0啦，所以把這個值返回給再上一層</li>
+<li>再上一層獲得了這個返回值之後就會明白，自己的估價肯定不會低於0的（因為它要選擇子層中最大的），那麼繼續擴展</li>
+<li>底層節點返回了-3</li>
+<li>上一層節點就知道自己肯定會小於-3，然後瞅瞅再上一層節點，人家告訴你它不會低於0的，因此後面的搜索就沒有必要進行了，直接返回就成了</li>
+<li>再上一層節點的估價確定為0，繼續返回給上層<br> ……</li>
+</ol>
+<h1 id="實戰篇"><a href="#實戰篇" class="headerlink" title="實戰篇"></a>實戰篇</h1><p>打這標題同時已經是<strong>2016年12月25日上午4:00</strong><br>沒錯就是一年一度最浪漫的<strong>聖誕節</strong>~~<br>也距離我的挑戰目標差不多只剩24小時…(抖<br>昨天平安夜放棄兩ㄊㄨㄚ的邀約，自幹五子棋沒有使用minmax等演算法但還是花了非常多的時間，所以沒什麼更新筆記現在才在趕進度(嘿嘿<br>廢話打完<br><br><br><br></p>
+<h1 id="AI實現的基本思路-極大極小值搜索算法"><a href="#AI實現的基本思路-極大極小值搜索算法" class="headerlink" title="AI實現的基本思路-極大極小值搜索算法"></a>AI實現的基本思路-極大極小值搜索算法</h1><ul>
+<li>電腦走棋的層我們稱為 MAX層，這一層電腦要保證自己利益最大化，那麼就需要選分最高的節點。</li>
+<li>玩家走棋的層我們稱為MIN層，這一層玩家要保證自己的利益最大化，那麼就會選分最低的節點。</li>
+</ul>
+<p>這也就是極大極小值搜索算法的名稱由來</p>
+<p><img src="https://i.imgur.com/YyOZK2m.png" alt=""></p>
+<p>此圖中甲是電腦，乙是玩家，那麼在甲層的時候，總是選其中值最大的節點，乙層的時候，總是選其中最小的節點。</p>
+<p>而每一個節點的分數，都是由子節點決定的，因此我們對博弈樹只能進行深度優先搜索而無法進行廣度優先搜索。深度優先搜索用遞歸非常容易實現，然後主要工作其實是完成一個評估函數，這個函數需要對當前局勢給出一個比較準確的評分。</p>
+<h3 id="極大極小值搜索"><a href="#極大極小值搜索" class="headerlink" title="極大極小值搜索"></a>極大極小值搜索</h3><p>五子棋是一個15x15的棋盤,因為棋盤大小不會變動，所以目前來看用 15*15 的二維陣列來存儲，效果是最好的。</p>
+<p>極大極小值的搜索比較簡單，就是一個DFS</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">AlphaBeta</span>(<span class="params">board, deep, alpha, beta,player</span>)</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">var</span> v = evaluate(board);            <span class="comment">//先判斷整個棋盤分數</span></div><div class="line">	<span class="keyword">if</span>(deep &lt;= <span class="number">0</span> || gameover) &#123;        <span class="comment">//如果搜尋到最上層或是遊戲結束了則不繼續搜尋</span></div><div class="line">		<span class="keyword">return</span> v;                    <span class="comment">//直接返回分數</span></div><div class="line">	&#125;	</div><div class="line">	<span class="keyword">var</span> bestx=<span class="number">0</span>,besty=<span class="number">0</span>;            <span class="comment">//要紀錄最好的分數</span></div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(player)&#123;            <span class="comment">//如果是電腦?</span></div><div class="line">		<span class="keyword">var</span> v=MIN;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">15</span>;i++)    <span class="comment">//搜尋整個棋盤上每個位子</span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>;j&lt;<span class="number">15</span>;j++) &#123;			</div><div class="line">			board[i][j] = chr.AI;    <span class="comment">//先假設ai下在這個位子</span></div><div class="line">			<span class="keyword">var</span> AlphaBetaTemp=AlphaBeta(board, deep<span class="number">-1</span>, alpha, beta,<span class="literal">false</span>);    </div><div class="line">			v = (v&gt;AlphaBetaTemp?v:AlphaBetaTemp);    <span class="comment">//照出最大的分數</span></div><div class="line">			board[i][j] = chr.empty;    <span class="comment">//把先前假設的位子還回去(設回空的</span></div><div class="line">			<span class="keyword">if</span>(v == alpha) &#123;    <span class="comment">//如果搜尋出來的分數跟之前最大的一樣大</span></div><div class="line">				bestx=i;        <span class="comment">//紀錄最好的結果</span></div><div class="line">                besty=j;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span>(v&gt;alpha)&#123;    <span class="comment">//如果搜尋出來的分數比之前最大的更大</span></div><div class="line">				alpha = v;   <span class="comment">//把alpha設為目前最高分</span></div><div class="line">				bestx=i;    <span class="comment">//紀錄最好的結果</span></div><div class="line">                besty=j;			</div><div class="line">			&#125;	</div><div class="line">		<span class="keyword">return</span> v;    <span class="comment">//回傳分數</span></div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span>&#123;                 <span class="comment">//如果不是電腦則是玩家</span></div><div class="line">		<span class="keyword">var</span> v=MAX;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">15</span>;i++)    <span class="comment">//搜尋整個棋盤</span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>;j&lt;<span class="number">15</span>;j++) &#123;</div><div class="line">			board[i][j] = chr.hum;    <span class="comment">//假設玩家下在某個位子</span></div><div class="line">			<span class="keyword">var</span> AlphaBetaTemp=AlphaBeta(board, deep<span class="number">-1</span>, alpha, beta,<span class="literal">true</span>);</div><div class="line">			v=(v&lt;AlphaBetaTemp?v:AlphaBetaTemp);    <span class="comment">//這邊是要找對電腦最沒有利的位子(分數最小</span></div><div class="line">			board[p[<span class="number">0</span>]][p[<span class="number">1</span>]] = chr.empty;        <span class="comment">//把剛才假設玩家下的位子還回去</span></div><div class="line">			beta=(beta&lt;v?beta:v);                <span class="comment">//尋找最低分(對電腦最沒有利</span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> v;                                <span class="comment">//回傳分數</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="評估函數"><a href="#評估函數" class="headerlink" title="評估函數"></a>評估函數</h3><p>我們對五子棋的評分是簡單的把棋盤上的各種連子的分值加起來得到的，對各種連子的基本評分規則如下：</p>
+<pre><code>成五，1000000
+活四, 100000
+活三 10000
+活二 1000
+活一 100
+</code></pre><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">SCORE = &#123;</div><div class="line">  ONE: 100,</div><div class="line">  TWO: 1000,</div><div class="line">  THREE: 10000,</div><div class="line">  FOUR: 100000,</div><div class="line">  FIVE: 1000000,</div><div class="line">  BLOCKED_ONE: 10,</div><div class="line">  BLOCKED_TWO: 100,</div><div class="line">  BLOCKED_THREE: 1000,</div><div class="line">  BLOCKED_FOUR: 10000</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>按照這個規則把棋盤上電腦的所有棋子打分，之和即為電腦的單方面得分 scoreCom，然後對玩家的棋子同樣打分 得到 scoreHum。</p>
+<p>scoreCom-scoreHum 即為當前局勢的總分數。</p>
+<p><br></p>
+<h1 id="Alpha-Beta剪枝"><a href="#Alpha-Beta剪枝" class="headerlink" title="Alpha Beta剪枝"></a>Alpha Beta剪枝</h1><p>前面講到過，AI會在MAX層選擇最大節點，而玩家會在MIN層選擇最小節點。那麼如下兩種情況就是分別對雙方不利的選擇：</p>
+<ul>
+<li>在MAX層，假設當前層已經搜索到一個最大值 X， 如果發現下一個節點的下一層（也就是MIN層）會產生一個比X還小的值，那麼就直接剪掉此節點。</li>
+</ul>
+<p>解釋一下，也就是在MAX層的時候會把當前層已經搜索到的最大值X存起來，如果下一個節點的下一層會產生一個比X還小的值Y，那麼之前說過玩家總是會選擇最小值的。也就是說這個節點玩家的分數不會超過Y，那麼這個節點顯然沒有必要進行計算了。</p>
+<p>通俗點來講就是，AI發現這一步是對玩家更有利的，那麼當然不會走這一步。</p>
+<ul>
+<li>在MIN層，假設當前層已經搜索到一個最小值 Y， 如果發現下一個節點的下一層（也就是MIN層）會產生一個比Y還大的值，那麼就直接剪掉此節點。</li>
+</ul>
+<p>這個是一樣的道理，如果玩家走了一步棋發現其實對AI更有利，玩家必定不會走這一步。<br><img src="https://upload.wikimedia.org/wikipedia/commons/9/91/AB_pruning.svg" alt=""></p>
+<p>如上圖所示，在第二層，也就是MIN層，當計算到第三個節點的時候，已知前面有一個3和一個6，也就是最小值為3。 在計算第三個節點的時候，發現它的第一個孩子的結果是5，因為它的孩子是MAX節點，而MAX節點是會選擇最大值的，那麼此節點的值不會比5小，因此此節點的後序孩子就沒有必要計算了，因為這個節點不可能小於5，而同一層已經有一個值為3的節點了。</p>
+<p>其實這個圖裡面第三層分數為7的節點也是不需要計算的。</p>
+<p>這是 MAX 節點的剪枝，MIN節點的剪枝也是同樣的道理，就不再講了。 Alpha Beta 剪枝的 Alpha 和 Beta 分別指的是MAX 和 MIN節點。</p>
+<h3 id="程式碼"><a href="#程式碼" class="headerlink" title="程式碼"></a>程式碼</h3><p>對max和min函數都增加一個 alpha 和 beta 參數。在 max 函數中如果發現一個子節點的值大於 alpha，則不再計算後序節點，此為 Alpha 剪枝。在 min 函數中如果發現一個子節點的值小於 beta，則不再計算後序節點，此為 Beta剪枝。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">AlphaBeta</span>(<span class="params">board, deep, alpha, beta,player</span>)</span>&#123;</div><div class="line"></div><div class="line">	<span class="keyword">var</span> v = evaluate(board);            <span class="comment">//先判斷整個棋盤分數</span></div><div class="line">	<span class="keyword">if</span>(deep &lt;= <span class="number">0</span> || gameover) &#123;        <span class="comment">//如果搜尋到最上層或是遊戲結束了則不繼續搜尋</span></div><div class="line">		<span class="keyword">return</span> v;                    <span class="comment">//直接返回分數</span></div><div class="line">	&#125;	</div><div class="line">	<span class="keyword">var</span> bestx=<span class="number">0</span>,besty=<span class="number">0</span>;            <span class="comment">//紀錄最好的分數</span></div><div class="line">	</div><div class="line">	<span class="keyword">if</span>(player)&#123;            <span class="comment">//如果是電腦?</span></div><div class="line">		<span class="keyword">var</span> v=MIN;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">15</span>;i++)    <span class="comment">//搜尋整個棋盤上每個位子</span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>;j&lt;<span class="number">15</span>;j++) &#123;			</div><div class="line">			board[i][j] = chr.AI;    <span class="comment">//先假設ai下在這個位子</span></div><div class="line">			<span class="keyword">var</span> AlphaBetaTemp=AlphaBeta(board, deep<span class="number">-1</span>, alpha, beta,<span class="literal">false</span>);    </div><div class="line">			v = (v&gt;AlphaBetaTemp?v:AlphaBetaTemp);    <span class="comment">//照出最大的分數</span></div><div class="line">			board[i][j] = chr.empty;    <span class="comment">//把先前假設的位子還回去(設回空的</span></div><div class="line">			<span class="keyword">if</span>(v == alpha) &#123;    <span class="comment">//如果搜尋出來的分數跟之前最大的一樣大</span></div><div class="line">				bestx=i;        <span class="comment">//紀錄最好的結果</span></div><div class="line">                besty=j;</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">if</span>(v&gt;alpha)&#123;    <span class="comment">//如果搜尋出來的分數比之前最大的更大</span></div><div class="line">				alpha = v;   <span class="comment">//把alpha設為目前最高分</span></div><div class="line">				bestx=i;    <span class="comment">//紀錄最好的結果</span></div><div class="line">                besty=j;			</div><div class="line">			&#125;	</div><div class="line">			<span class="keyword">if</span>(beta&lt;=alpha)<span class="keyword">break</span>;	<span class="comment">//	AlphaBeta剪枝</span></div><div class="line">			&#125;</div><div class="line">		<span class="keyword">return</span> v;    <span class="comment">//回傳分數</span></div><div class="line">	&#125;</div><div class="line">	<span class="keyword">else</span>&#123;                 <span class="comment">//如果不是電腦則是玩家</span></div><div class="line">		<span class="keyword">var</span> v=MAX;</div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>;i&lt;<span class="number">15</span>;i++)    <span class="comment">//搜尋整個棋盤</span></div><div class="line">		<span class="keyword">for</span>(<span class="keyword">var</span> j=<span class="number">0</span>;j&lt;<span class="number">15</span>;j++) &#123;</div><div class="line">			board[i][j] = chr.hum;    <span class="comment">//假設玩家下在某個位子</span></div><div class="line">			<span class="keyword">var</span> AlphaBetaTemp=AlphaBeta(board, deep<span class="number">-1</span>, alpha, beta,<span class="literal">true</span>);</div><div class="line">			v=(v&lt;AlphaBetaTemp?v:AlphaBetaTemp);    <span class="comment">//這邊是要找對電腦最沒有利的位子(分數最小</span></div><div class="line">			board[p[<span class="number">0</span>]][p[<span class="number">1</span>]] = chr.empty;        <span class="comment">//把剛才假設玩家下的位子還回去</span></div><div class="line">			beta=(beta&lt;v?beta:v);                <span class="comment">//尋找最低分(對電腦最沒有利</span></div><div class="line">			<span class="keyword">if</span>(beta&lt;=alpha)<span class="keyword">break</span>;		        <span class="comment">//	AlphaBeta剪枝	    </span></div><div class="line">		&#125;</div><div class="line">		<span class="keyword">return</span> v;                                <span class="comment">//回傳分數</span></div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><br><br><br></p>
+<h1 id="引用-amp-參考"><a href="#引用-amp-參考" class="headerlink" title="引用&amp;參考:"></a>引用&amp;參考:</h1><h6 id="引用網址：http-blog-csdn-net-tianranhe-article-details-8301756"><a href="#引用網址：http-blog-csdn-net-tianranhe-article-details-8301756" class="headerlink" title="引用網址：http://blog.csdn.net/tianranhe/article/details/8301756"></a>引用網址：<a href="http://blog.csdn.net/tianranhe/article/details/8301756" target="_blank" rel="external">http://blog.csdn.net/tianranhe/article/details/8301756</a></h6><h6 id="引用網址：http-programmermagazine-github-io-201407-htm-focus3-html"><a href="#引用網址：http-programmermagazine-github-io-201407-htm-focus3-html" class="headerlink" title="引用網址：http://programmermagazine.github.io/201407/htm/focus3.html"></a>引用網址：<a href="http://programmermagazine.github.io/201407/htm/focus3.html" target="_blank" rel="external">http://programmermagazine.github.io/201407/htm/focus3.html</a></h6><h6 id="引用網址：http-blueve-me-archives-825"><a href="#引用網址：http-blueve-me-archives-825" class="headerlink" title="引用網址：http://blueve.me/archives/825"></a>引用網址：<a href="http://blueve.me/archives/825" target="_blank" rel="external">http://blueve.me/archives/825</a></h6><h6 id="引用網址：http-www-voidcn-com-blog-lihongxun945-cata-6089493"><a href="#引用網址：http-www-voidcn-com-blog-lihongxun945-cata-6089493" class="headerlink" title="引用網址：http://www.voidcn.com/blog/lihongxun945/cata/6089493/"></a>引用網址：<a href="http://www.voidcn.com/blog/lihongxun945/cata/6089493/" target="_blank" rel="external">http://www.voidcn.com/blog/lihongxun945/cata/6089493/</a></h6><h6 id="【本文取材並修改自維基百科和以上引用網址】"><a href="#【本文取材並修改自維基百科和以上引用網址】" class="headerlink" title="【本文取材並修改自維基百科和以上引用網址】"></a>【本文取材並修改自維基百科和以上引用網址】</h6></the>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/01/25/從零開始五子棋AI學習筆記/"></a></p>
+        <p><span>文章作者:</span><a href="/" title="访问 Andy 的个人博客">Andy</a></p>
+        <p><span>发布时间:</span>2017年01月25日 - 20时53分</p>
+        <p><span>最后更新:</span>2017年01月25日 - 21时40分</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/01/25/從零開始五子棋AI學習筆記/" title="">https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/　　作者: Andy" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script src="/js/clipboard.min.js"></script>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+<nav id="article-nav">
+  
+  
+    <a href="/2017/01/25/hello-world/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Hello World</div>
+      <strong class="article-nav-caption">></strong>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+    <strong class="toc-title">文章目录</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#從零開始五子棋AI學習筆記"><span class="toc-number">1.</span> <span class="toc-text">從零開始五子棋AI學習筆記</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#tags-五子棋AI-AlphaBeta-MinMax-node-js"><span class="toc-number">1.0.0.0.0.1.</span> <span class="toc-text">tags: 五子棋AI AlphaBeta MinMax node.js</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#所以可能會有很多寫錯的地方…"><span class="toc-number">1.0.0.0.0.2.</span> <span class="toc-text">所以可能會有很多寫錯的地方…</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#目標"><span class="toc-number">2.</span> <span class="toc-text">目標</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#演算法簡介"><span class="toc-number">3.</span> <span class="toc-text">演算法簡介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#極小化極大算法-MaxMin演算法"><span class="toc-number">3.0.1.</span> <span class="toc-text">極小化極大算法(MaxMin演算法)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode"><span class="toc-number">3.0.2.</span> <span class="toc-text">Pseudocode:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alpha-beta剪枝"><span class="toc-number">3.0.3.</span> <span class="toc-text">Alpha-beta剪枝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#陳鍾誠教授的影片講解"><span class="toc-number">3.0.4.</span> <span class="toc-text">陳鍾誠教授的影片講解:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode-1"><span class="toc-number">3.0.5.</span> <span class="toc-text">Pseudocode:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#實戰篇"><span class="toc-number">4.</span> <span class="toc-text">實戰篇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AI實現的基本思路-極大極小值搜索算法"><span class="toc-number">5.</span> <span class="toc-text">AI實現的基本思路-極大極小值搜索算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#極大極小值搜索"><span class="toc-number">5.0.1.</span> <span class="toc-text">極大極小值搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#評估函數"><span class="toc-number">5.0.2.</span> <span class="toc-text">評估函數</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Alpha-Beta剪枝"><span class="toc-number">6.</span> <span class="toc-text">Alpha Beta剪枝</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程式碼"><span class="toc-number">6.0.1.</span> <span class="toc-text">程式碼</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用-amp-參考"><span class="toc-number">7.</span> <span class="toc-text">引用&參考:</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-blog-csdn-net-tianranhe-article-details-8301756"><span class="toc-number">7.0.0.0.0.1.</span> <span class="toc-text">引用網址：http://blog.csdn.net/tianranhe/article/details/8301756</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-programmermagazine-github-io-201407-htm-focus3-html"><span class="toc-number">7.0.0.0.0.2.</span> <span class="toc-text">引用網址：http://programmermagazine.github.io/201407/htm/focus3.html</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-blueve-me-archives-825"><span class="toc-number">7.0.0.0.0.3.</span> <span class="toc-text">引用網址：http://blueve.me/archives/825</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-www-voidcn-com-blog-lihongxun945-cata-6089493"><span class="toc-number">7.0.0.0.0.4.</span> <span class="toc-text">引用網址：http://www.voidcn.com/blog/lihongxun945/cata/6089493/</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#【本文取材並修改自維基百科和以上引用網址】"><span class="toc-number">7.0.0.0.0.5.</span> <span class="toc-text">【本文取材並修改自維基百科和以上引用網址】</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+</div>
+<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隐藏目录";
+    var valueShow = "显示目录";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
+
+
+
+<div class="bdsharebuttonbox">
+	<a href="#" class="fx fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+	<a href="#" class="fx fa-weixin bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+	<a href="#" class="fx fa-qq bds_sqq" data-cmd="sqq" title="分享到QQ好友"></a>
+	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+</div>
+<script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
+
+
+
+
+    
+      <div class="duoshuo" id="comments">
+    <!-- 多说评论框 start -->
+    <div class="ds-thread" data-thread-key="2017/01/25/從零開始五子棋AI學習筆記/" data-title="" data-url="https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/"></div>
+    <!-- 多说评论框 end -->
+    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <script type="text/javascript">
+    var duoshuoQuery = {short_name:"null"};
+    (function() {
+        var ds = document.createElement('script');
+        ds.type = 'text/javascript';ds.async = true;
+        ds.src = '/js/embed.js';
+        ds.charset = 'UTF-8';
+        (document.getElementsByTagName('head')[0] 
+         || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+    </script>
+    <!-- 多说公共JS代码 end -->
+</div>
+
+    
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+        
+            <a href="/2017/01/25/hello-world/" title="下一篇: Hello World">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/01/25/從零開始五子棋AI學習筆記/">從零開始五子棋AI學習筆記</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/25/hello-world/">Hello World</a></li></ul>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+    <script>
+        $(".post-list").addClass("toc-article");
+        $(".post-list-item a").attr("target","_blank");
+        $("#post-nav-button > a:nth-child(2)").click(function() {
+            $(".fa-bars, .fa-times").toggle();
+            $(".post-list").toggle(300);
+            if ($(".toc").length > 0) {
+                $("#toc, #tocButton").toggle(200, function() {
+                    if ($(".switch-area").is(":visible")) {
+                        $("#tocButton").attr("value", valueHide);
+                        }
+                    })
+            }
+            else {
+            }
+        })
+    </script>
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                &copy; 2017 Andy
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank">Hexo</a>  Theme <a href="https://github.com/luuman/hexo-theme-spfk" target="_blank">spfk</a> by luuman
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" >到訪數: 
+                            <span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>, </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit">本頁閱讀量: 
+                            <span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+
+    </div>
+    <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script src="/js/main.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var backgroundnum = 24;
+            var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+            $("#mobile-nav").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+            $(".left-col").css({"background-image": backgroundimg,"background-size": "cover","background-position": "center"});
+        })
+    </script>
+
+
+
+
+
+<div class="scroll" id="scroll">
+    <a href="#"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    $(document).ready(function() {
+        if ($("#comments").length < 1) {
+            $("#scroll > a:nth-child(2)").hide();
+        };
+    })
+</script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+  <script language="javascript">
+    $(function() {
+        $("a[title]").each(function() {
+            var a = $(this);
+            var title = a.attr('title');
+            if (title == undefined || title == "") return;
+            a.data('title', title).removeAttr('title').hover(
+
+            function() {
+                var offset = a.offset();
+                $("<div id=\"anchortitlecontainer\"></div>").appendTo($("body")).html(title).css({
+                    top: offset.top - a.outerHeight() - 15,
+                    left: offset.left + a.outerWidth()/2 + 1
+                }).fadeIn(function() {
+                    var pop = $(this);
+                    setTimeout(function() {
+                        pop.remove();
+                    }, pop.text().length * 800);
+                });
+            }, function() {
+                $("#anchortitlecontainer").remove();
+            });
+        });
+    });
+</script>
+
+
+  </div>
+</body>
+</html>
