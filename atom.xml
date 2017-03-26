@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>Hexo</title>
-  
+  <title>Andy&#39;s Blog</title>
+  <subtitle>寫下學習路途的風景</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="http://yoursite.com/"/>
+  <link href="https://andy112247.github.io/"/>
   <updated>2017-03-26T01:36:41.353Z</updated>
-  <id>http://yoursite.com/</id>
+  <id>https://andy112247.github.io/</id>
   
   <author>
-    <name>John Doe</name>
+    <name>Andy</name>
     
   </author>
   
@@ -17,8 +17,8 @@
   
   <entry>
     <title></title>
-    <link href="http://yoursite.com/2017/03/26/%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E4%B9%8B%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E4%B9%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E3%81%AE%E7%AD%86%E8%A8%98(1)-%E6%84%9F%E7%9F%A5%E6%A9%9F/"/>
-    <id>http://yoursite.com/2017/03/26/人工智慧之機器學習之神經網路の筆記(1)-感知機/</id>
+    <link href="https://andy112247.github.io/2017/03/26/%E4%BA%BA%E5%B7%A5%E6%99%BA%E6%85%A7%E4%B9%8B%E6%A9%9F%E5%99%A8%E5%AD%B8%E7%BF%92%E4%B9%8B%E7%A5%9E%E7%B6%93%E7%B6%B2%E8%B7%AF%E3%81%AE%E7%AD%86%E8%A8%98(1)-%E6%84%9F%E7%9F%A5%E6%A9%9F/"/>
+    <id>https://andy112247.github.io/2017/03/26/人工智慧之機器學習之神經網路の筆記(1)-感知機/</id>
     <published>2017-03-26T01:12:17.234Z</published>
     <updated>2017-03-26T01:36:41.353Z</updated>
     
@@ -138,8 +138,8 @@
   
   <entry>
     <title></title>
-    <link href="http://yoursite.com/2017/01/25/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E4%BA%94%E5%AD%90%E6%A3%8BAI%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/"/>
-    <id>http://yoursite.com/2017/01/25/從零開始五子棋AI學習筆記/</id>
+    <link href="https://andy112247.github.io/2017/01/25/%E5%BE%9E%E9%9B%B6%E9%96%8B%E5%A7%8B%E4%BA%94%E5%AD%90%E6%A3%8BAI%E5%AD%B8%E7%BF%92%E7%AD%86%E8%A8%98/"/>
+    <id>https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/</id>
     <published>2017-01-25T12:53:03.242Z</published>
     <updated>2017-01-25T13:40:29.513Z</updated>
     
@@ -262,8 +262,8 @@
   
   <entry>
     <title>Hello World</title>
-    <link href="http://yoursite.com/2017/01/25/hello-world/"/>
-    <id>http://yoursite.com/2017/01/25/hello-world/</id>
+    <link href="https://andy112247.github.io/2017/01/25/hello-world/"/>
+    <id>https://andy112247.github.io/2017/01/25/hello-world/</id>
     <published>2017-01-25T11:01:57.668Z</published>
     <updated>2017-03-26T01:02:25.709Z</updated>
     
