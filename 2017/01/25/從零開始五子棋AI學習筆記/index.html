@@ -45,7 +45,7 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
   
       <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
   
-  <!-- 加载特效 -->
+  <!-- 加載特效 -->
     <script src="/js/pace.js"></script>
     <link href="/css/pace/pace-theme-flash.css" rel="stylesheet" />
   <script>
@@ -111,13 +111,13 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
                 <div class="tips-box hide">
                     <div class="tips-arrow"></div>
                     <ul class="tips-inner">
-                        <li>菜单</li>
-                        <li>标签</li>
+                        <li>菜單</li>
+                        <li>標籤</li>
                         
-                        <li>友情链接</li>
+                        <li>友情鏈接</li>
                         
                         
-                        <li>关于我</li>
+                        <li>關於我</li>
                         
                     </ul>
                 </div>
@@ -261,8 +261,8 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
         <h1 id="從零開始五子棋AI學習筆記"><a href="#從零開始五子棋AI學習筆記" class="headerlink" title="從零開始五子棋AI學習筆記"></a>從零開始五子棋AI學習筆記</h1><p>完成後將會發布至 (<a href="https://andy112247.github.io">https://andy112247.github.io</a>)</p>
 <h6 id="tags-五子棋AI-AlphaBeta-MinMax-node-js"><a href="#tags-五子棋AI-AlphaBeta-MinMax-node-js" class="headerlink" title="tags: 五子棋AI AlphaBeta MinMax node.js"></a>tags: <code>五子棋AI</code> <code>AlphaBeta</code> <code>MinMax</code> <code>node.js</code></h6><p>這是我的第一個線上筆記^^</p>
 <p>寫下我的學習過程希望能幫助跟我一樣都是新手的人<br>至於為甚麼會想寫五子棋AI程式呢?因為 <a href="https://www.facebook.com/photo.php?fbid=1182458468516759&amp;set=a.203079396454676.44378.100002578513773&amp;type=3&amp;theater" target="_blank" rel="external">詳情</a><br>為甚麼說是從零開始呢?因為小弟<strong>程式廢渣</strong>，也沒接觸過AI更別提AlphaBeta還是MinMax演算法…連個OOXX還是DFS BFS都沒寫過Orz</p>
-<p><excerpt in="" index="" |="" 首页摘要=""><br>…<a id="more"></a></excerpt></p>
-<the rest="" of="" contents="" |="" 余下全文="">
+<p><excerpt in="" index="" |="" 首頁摘要=""><br>…<a id="more"></a></excerpt></p>
+<the rest="" of="" contents="" |="" 餘下全文="">
 
 <h6 id="所以可能會有很多寫錯的地方…"><a href="#所以可能會有很多寫錯的地方…" class="headerlink" title="所以可能會有很多寫錯的地方…"></a>所以可能會有很多寫錯的地方…</h6><h1 id="目標"><a href="#目標" class="headerlink" title="目標"></a>目標</h1><ul>
 <li>利用node.js寫出線上對弈五子棋AI程式</li>
@@ -300,7 +300,7 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
 <h3 id="陳鍾誠教授的影片講解"><a href="#陳鍾誠教授的影片講解" class="headerlink" title="陳鍾誠教授的影片講解:"></a>陳鍾誠教授的影片講解:</h3><p>感謝老師…</p>
 <div class="video-container"><iframe src="//www.youtube.com/embed/fB0J0ZrFo-I" frameborder="0" allowfullscreen></iframe></div>
 <p><br><br></p>
-<h3 id="Pseudocode-1"><a href="#Pseudocode-1" class="headerlink" title="Pseudocode:"></a>Pseudocode:</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"> <span class="function">function <span class="title">alphabeta</span><span class="params">(node, depth, α, β, maximizingPlayer)</span></span></div><div class="line">      <span class="keyword">if</span> depth = <span class="number">0</span> or node is a terminal node</div><div class="line">          <span class="keyword">return</span> the heuristic value of node</div><div class="line">      <span class="keyword">if</span> maximizingPlayer</div><div class="line">          v := -∞</div><div class="line">          <span class="keyword">for</span> each child of node</div><div class="line">              v := max(v, alphabeta(child, depth – <span class="number">1</span>, α, β, FALSE))</div><div class="line">              α := max(α, v)</div><div class="line">              <span class="keyword">if</span> β ≤ α</div><div class="line">              <span class="comment">//如果β ≤ α就break掉，break的話這個回圈就離開了，所以就會切掉很多後面的節點</span></div><div class="line">                  <span class="keyword">break</span> (* β cut-off *)</div><div class="line">                  <span class="comment">//這個叫做 β cut-off</span></div><div class="line">          <span class="keyword">return</span> v</div><div class="line">      <span class="keyword">else</span></div><div class="line">          v := ∞</div><div class="line">          <span class="keyword">for</span> each child of node</div><div class="line">              v := min(v, alphabeta(child, depth – <span class="number">1</span>, α, β, TRUE))</div><div class="line">              β := min(β, v)</div><div class="line">              <span class="keyword">if</span> β ≤ α</div><div class="line">                  <span class="keyword">break</span> (* α cut-off *)</div><div class="line">                  <span class="comment">//這個叫做 α cut-off</span></div><div class="line">          <span class="keyword">return</span> v</div><div class="line">         </div><div class="line">(* Initial call *)</div><div class="line">alphabeta(origin, depth, -∞, +∞, TRUE)</div><div class="line"><span class="comment">//一開始的α是設-∞，因為一開始是取大的才會一直提升，β反之亦然才會一直下降</span></div></pre></td></tr></table></figure>
+<h3 id="Pseudocode-1"><a href="#Pseudocode-1" class="headerlink" title="Pseudocode:"></a>Pseudocode:</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"> <span class="function">function <span class="title">alphabeta</span><span class="params">(node, depth, α, β, maximizingPlayer)</span></span></div><div class="line">      <span class="keyword">if</span> depth = <span class="number">0</span> or node is a terminal node</div><div class="line">          <span class="keyword">return</span> the heuristic value of node</div><div class="line">      <span class="keyword">if</span> maximizingPlayer</div><div class="line">          v := -∞</div><div class="line">          <span class="keyword">for</span> each child of node</div><div class="line">              v := max(v, alphabeta(child, depth – <span class="number">1</span>, α, β, FALSE))</div><div class="line">              α := max(α, v)</div><div class="line">              <span class="keyword">if</span> β ≤ α</div><div class="line">              <span class="comment">//如果β ≤ α就break掉，break的話這個迴圈就離開了，所以就會切掉很多後面的節點</span></div><div class="line">                  <span class="keyword">break</span> (* β cut-off *)</div><div class="line">                  <span class="comment">//這個叫做 β cut-off</span></div><div class="line">          <span class="keyword">return</span> v</div><div class="line">      <span class="keyword">else</span></div><div class="line">          v := ∞</div><div class="line">          <span class="keyword">for</span> each child of node</div><div class="line">              v := min(v, alphabeta(child, depth – <span class="number">1</span>, α, β, TRUE))</div><div class="line">              β := min(β, v)</div><div class="line">              <span class="keyword">if</span> β ≤ α</div><div class="line">                  <span class="keyword">break</span> (* α cut-off *)</div><div class="line">                  <span class="comment">//這個叫做 α cut-off</span></div><div class="line">          <span class="keyword">return</span> v</div><div class="line">         </div><div class="line">(* Initial call *)</div><div class="line">alphabeta(origin, depth, -∞, +∞, TRUE)</div><div class="line"><span class="comment">//一開始的α是設-∞，因為一開始是取大的才會一直提升，β反之亦然才會一直下降</span></div></pre></td></tr></table></figure>
 <p><br><br></p>
 <p>假設棋盤上的正中心已經下有一個棋子，那麼棋盤上還有224個可以放置的點位，那麼博弈樹搜索的第一層就需要擴展224個狀態節點；<br>    接下來，每個狀態節點都剩餘223個可放置棋子的位置，所以需要繼續擴展223個狀態節點，所以第二層會存在224 <em> 223個狀態節點；<br>    依次類推，第三層會有224 </em> 223 <em> 222個狀態節點；<br>    第四層會有224 </em> 223 <em> 222 </em> 221個狀態節點<br>    ……</p>
 <p>那麼如果我們就算到第四層，總共需要搜索到：<br>224 + 224 <em> 223 + 224 </em> 223 <em> 222 + 224 </em> 223 <em> 222 </em> 221 = 2 461 884 544<br>呵呵了。每次都要搜索如此多的狀態節點，這樣的開銷是十分可觀的，因此，我們提高效率的方式就鎖定到了：如何減少需要搜索的狀態節點。<br>α-β剪枝就是一種博弈算法中最常用的剪枝算法</p>
@@ -323,7 +323,7 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
 <li>上一層節點就知道自己肯定會小於-3，然後瞅瞅再上一層節點，人家告訴你它不會低於0的，因此後面的搜索就沒有必要進行了，直接返回就成了</li>
 <li>再上一層節點的估價確定為0，繼續返回給上層<br> ……</li>
 </ol>
-<h1 id="實戰篇"><a href="#實戰篇" class="headerlink" title="實戰篇"></a>實戰篇</h1><p>打這標題同時已經是<strong>2016年12月25日上午4:00</strong><br>沒錯就是一年一度最浪漫的<strong>聖誕節</strong>~~<br>也距離我的挑戰目標差不多只剩24小時…(抖<br>昨天平安夜放棄兩ㄊㄨㄚ的邀約，自幹五子棋沒有使用minmax等演算法但還是花了非常多的時間，所以沒什麼更新筆記現在才在趕進度(嘿嘿<br>廢話打完<br><br><br><br></p>
+<h1 id="實戰篇"><a href="#實戰篇" class="headerlink" title="實戰篇"></a>實戰篇</h1><p>打這標題同時已經是<strong>2016年12月25日上午4:00</strong><br>沒錯就是一年一度最浪漫的<strong>聖誕節</strong>~~<br>也距離我的挑戰目標差不多隻剩24小時…(抖<br>昨天平安夜放棄兩ㄊㄨㄚ的邀約，自幹五子棋沒有使用minmax等演算法但還是花了非常多的時間，所以沒什麼更新筆記現在才在趕進度(嘿嘿<br>廢話打完<br><br><br><br></p>
 <h1 id="AI實現的基本思路-極大極小值搜索算法"><a href="#AI實現的基本思路-極大極小值搜索算法" class="headerlink" title="AI實現的基本思路-極大極小值搜索算法"></a>AI實現的基本思路-極大極小值搜索算法</h1><ul>
 <li>電腦走棋的層我們稱為 MAX層，這一層電腦要保證自己利益最大化，那麼就需要選分最高的節點。</li>
 <li>玩家走棋的層我們稱為MIN層，這一層玩家要保證自己的利益最大化，那麼就會選分最低的節點。</li>
