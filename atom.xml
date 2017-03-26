@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
   <title>Andy&#39;s Blog</title>
-  <subtitle>寫下學習路途的風景</subtitle>
+  <subtitle>寫下學習路途的風景test</subtitle>
   <link href="/atom.xml" rel="self"/>
   
   <link href="https://andy112247.github.io/"/>
@@ -22,7 +22,7 @@
     <published>2017-03-26T01:12:17.234Z</published>
     <updated>2017-03-26T01:36:41.353Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="人工智慧之機器學習之神經網路の筆記-1-感知機"><a href="#人工智慧之機器學習之神經網路の筆記-1-感知機" class="headerlink" title="人工智慧之機器學習之神經網路の筆記(1)-感知機"></a>人工智慧之機器學習之神經網路の筆記(1)-感知機</h1><h4 id="c語言-實作and-or-xor-邏輯閘感知機"><a href="#c語言-實作and-or-xor-邏輯閘感知機" class="headerlink" title="c語言 實作and or xor 邏輯閘感知機"></a>c語言 實作and or xor 邏輯閘感知機</h4><p>完成後將會發布至 (<a href="https://andy112247.github.io" target="_blank" rel="external">https://andy112247.github.io</a>)<br>我是新手LV1 可能會有很多地方打錯(說不定連標題都是錯的<br>總之發現有錯誤的話麻煩指正我，3Q</p>
+    <content type="html"><![CDATA[<h1 id="人工智慧之機器學習之神經網路の筆記-1-感知機"><a href="#人工智慧之機器學習之神經網路の筆記-1-感知機" class="headerlink" title="人工智慧之機器學習之神經網路の筆記(1)-感知機"></a>人工智慧之機器學習之神經網路の筆記(1)-感知機</h1><h4 id="c語言-實作and-or-xor-邏輯閘感知機"><a href="#c語言-實作and-or-xor-邏輯閘感知機" class="headerlink" title="c語言 實作and or xor 邏輯閘感知機"></a>c語言 實作and or xor 邏輯閘感知機</h4><p>完成後將會發布至 (<a href="https://andy112247.github.io">https://andy112247.github.io</a>)<br>我是新手LV1 可能會有很多地方打錯(說不定連標題都是錯的<br>總之發現有錯誤的話麻煩指正我，3Q</p>
 <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p><img src="http://i.imgur.com/xAFiPm3.jpg" alt=""><br>網路上的教學常常都是寫一堆嚇死人的數學公式，要不然就是範例程式寫得一坨拉庫令人退避三舍，對於我這麼一個數學廢物來說要看懂實在是太困難了，於是我決定順便寫一個簡單易懂公式不多程式看起來也不複雜的筆記(應該啦…<br>大概是國中高中會寫if for就能看懂的難度喔~</p>
 <p><excerpt in="" index="" |="" 首页摘要=""><br>…<a id="more"></a></excerpt></p>
 <the rest="" of="" contents="" |="" 余下全文="">
@@ -143,7 +143,7 @@
     <published>2017-01-25T12:53:03.242Z</published>
     <updated>2017-01-25T13:40:29.513Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="從零開始五子棋AI學習筆記"><a href="#從零開始五子棋AI學習筆記" class="headerlink" title="從零開始五子棋AI學習筆記"></a>從零開始五子棋AI學習筆記</h1><p>完成後將會發布至 (<a href="https://andy112247.github.io" target="_blank" rel="external">https://andy112247.github.io</a>)</p>
+    <content type="html"><![CDATA[<h1 id="從零開始五子棋AI學習筆記"><a href="#從零開始五子棋AI學習筆記" class="headerlink" title="從零開始五子棋AI學習筆記"></a>從零開始五子棋AI學習筆記</h1><p>完成後將會發布至 (<a href="https://andy112247.github.io">https://andy112247.github.io</a>)</p>
 <h6 id="tags-五子棋AI-AlphaBeta-MinMax-node-js"><a href="#tags-五子棋AI-AlphaBeta-MinMax-node-js" class="headerlink" title="tags: 五子棋AI AlphaBeta MinMax node.js"></a>tags: <code>五子棋AI</code> <code>AlphaBeta</code> <code>MinMax</code> <code>node.js</code></h6><p>這是我的第一個線上筆記^^</p>
 <p>寫下我的學習過程希望能幫助跟我一樣都是新手的人<br>至於為甚麼會想寫五子棋AI程式呢?因為 <a href="https://www.facebook.com/photo.php?fbid=1182458468516759&amp;set=a.203079396454676.44378.100002578513773&amp;type=3&amp;theater" target="_blank" rel="external">詳情</a><br>為甚麼說是從零開始呢?因為小弟<strong>程式廢渣</strong>，也沒接觸過AI更別提AlphaBeta還是MinMax演算法…連個OOXX還是DFS BFS都沒寫過Orz</p>
 <p><excerpt in="" index="" |="" 首页摘要=""><br>…<a id="more"></a></excerpt></p>
@@ -265,7 +265,7 @@
     <link href="https://andy112247.github.io/2017/01/25/hello-world/"/>
     <id>https://andy112247.github.io/2017/01/25/hello-world/</id>
     <published>2017-01-25T11:01:57.668Z</published>
-    <updated>2017-03-26T01:02:25.709Z</updated>
+    <updated>2017-03-26T05:37:05.293Z</updated>
     
     <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
 <h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">$ hexo new <span class="string">"My New Post"</span></div></pre></td></tr></table></figure>
