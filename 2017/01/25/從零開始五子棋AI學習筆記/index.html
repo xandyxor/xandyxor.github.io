@@ -369,18 +369,18 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/01/25/從零開始五子棋AI學習筆記/"></a></p>
-        <p><span>文章作者:</span><a href="/" title="访问 Andy 的个人博客">Andy</a></p>
-        <p><span>发布时间:</span>2017年01月25日 - 20时53分</p>
-        <p><span>最后更新:</span>2017年01月25日 - 21时40分</p>
+        <p><span>本文標題:</span><a href="/2017/01/25/從零開始五子棋AI學習筆記/"></a></p>
+        <p><span>文章作者:</span><a href="/" title="訪問 Andy 的個人部落格">Andy</a></p>
+        <p><span>發布時間:</span>2017年01月25日 - 20時53分</p>
+        <p><span>最後更新:</span>2017年01月25日 - 21時40分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/01/25/從零開始五子棋AI學習筆記/" title="">https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/　　作者: Andy" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始連結:</span><a class="post-url" href="/2017/01/25/從零開始五子棋AI學習筆記/" title="">https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/　　作者: Andy" title="點擊複製文章連結"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+            <span>許可協議:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中華民國 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 轉載請保留原文連結及作者。
         </p>
     </div>
 
@@ -409,19 +409,48 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
 </article>
 
     <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">文章目錄</strong>
     <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#從零開始五子棋AI學習筆記"><span class="toc-number">1.</span> <span class="toc-text">從零開始五子棋AI學習筆記</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#tags-五子棋AI-AlphaBeta-MinMax-node-js"><span class="toc-number">1.0.0.0.0.1.</span> <span class="toc-text">tags: 五子棋AI AlphaBeta MinMax node.js</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#所以可能會有很多寫錯的地方…"><span class="toc-number">1.0.0.0.0.2.</span> <span class="toc-text">所以可能會有很多寫錯的地方…</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#目標"><span class="toc-number">2.</span> <span class="toc-text">目標</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#演算法簡介"><span class="toc-number">3.</span> <span class="toc-text">演算法簡介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#極小化極大算法-MaxMin演算法"><span class="toc-number">3.0.1.</span> <span class="toc-text">極小化極大算法(MaxMin演算法)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode"><span class="toc-number">3.0.2.</span> <span class="toc-text">Pseudocode:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alpha-beta剪枝"><span class="toc-number">3.0.3.</span> <span class="toc-text">Alpha-beta剪枝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#陳鍾誠教授的影片講解"><span class="toc-number">3.0.4.</span> <span class="toc-text">陳鍾誠教授的影片講解:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode-1"><span class="toc-number">3.0.5.</span> <span class="toc-text">Pseudocode:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#實戰篇"><span class="toc-number">4.</span> <span class="toc-text">實戰篇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AI實現的基本思路-極大極小值搜索算法"><span class="toc-number">5.</span> <span class="toc-text">AI實現的基本思路-極大極小值搜索算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#極大極小值搜索"><span class="toc-number">5.0.1.</span> <span class="toc-text">極大極小值搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#評估函數"><span class="toc-number">5.0.2.</span> <span class="toc-text">評估函數</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Alpha-Beta剪枝"><span class="toc-number">6.</span> <span class="toc-text">Alpha Beta剪枝</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程式碼"><span class="toc-number">6.0.1.</span> <span class="toc-text">程式碼</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用-amp-參考"><span class="toc-number">7.</span> <span class="toc-text">引用&參考:</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-blog-csdn-net-tianranhe-article-details-8301756"><span class="toc-number">7.0.0.0.0.1.</span> <span class="toc-text">引用網址：http://blog.csdn.net/tianranhe/article/details/8301756</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-programmermagazine-github-io-201407-htm-focus3-html"><span class="toc-number">7.0.0.0.0.2.</span> <span class="toc-text">引用網址：http://programmermagazine.github.io/201407/htm/focus3.html</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-blueve-me-archives-825"><span class="toc-number">7.0.0.0.0.3.</span> <span class="toc-text">引用網址：http://blueve.me/archives/825</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-www-voidcn-com-blog-lihongxun945-cata-6089493"><span class="toc-number">7.0.0.0.0.4.</span> <span class="toc-text">引用網址：http://www.voidcn.com/blog/lihongxun945/cata/6089493/</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#【本文取材並修改自維基百科和以上引用網址】"><span class="toc-number">7.0.0.0.0.5.</span> <span class="toc-text">【本文取材並修改自維基百科和以上引用網址】</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
 </div>
-<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<input type="button" id="tocButton" value="隱藏目錄"  title="點擊按鈕隱藏或者顯示文章目錄">
 
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 <script>
-    var valueHide = "隐藏目录";
-    var valueShow = "显示目录";
+    var valueHide = "隱藏目錄";
+    var valueShow = "顯示目錄";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }<div id="toc" class="toc-article">
+    <strong class="toc-title">文章目錄</strong>
+    <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#從零開始五子棋AI學習筆記"><span class="toc-number">1.</span> <span class="toc-text">從零開始五子棋AI學習筆記</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#tags-五子棋AI-AlphaBeta-MinMax-node-js"><span class="toc-number">1.0.0.0.0.1.</span> <span class="toc-text">tags: 五子棋AI AlphaBeta MinMax node.js</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#所以可能會有很多寫錯的地方…"><span class="toc-number">1.0.0.0.0.2.</span> <span class="toc-text">所以可能會有很多寫錯的地方…</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#目標"><span class="toc-number">2.</span> <span class="toc-text">目標</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#演算法簡介"><span class="toc-number">3.</span> <span class="toc-text">演算法簡介</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#極小化極大算法-MaxMin演算法"><span class="toc-number">3.0.1.</span> <span class="toc-text">極小化極大算法(MaxMin演算法)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode"><span class="toc-number">3.0.2.</span> <span class="toc-text">Pseudocode:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Alpha-beta剪枝"><span class="toc-number">3.0.3.</span> <span class="toc-text">Alpha-beta剪枝</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#陳鍾誠教授的影片講解"><span class="toc-number">3.0.4.</span> <span class="toc-text">陳鍾誠教授的影片講解:</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Pseudocode-1"><span class="toc-number">3.0.5.</span> <span class="toc-text">Pseudocode:</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#實戰篇"><span class="toc-number">4.</span> <span class="toc-text">實戰篇</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#AI實現的基本思路-極大極小值搜索算法"><span class="toc-number">5.</span> <span class="toc-text">AI實現的基本思路-極大極小值搜索算法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#極大極小值搜索"><span class="toc-number">5.0.1.</span> <span class="toc-text">極大極小值搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#評估函數"><span class="toc-number">5.0.2.</span> <span class="toc-text">評估函數</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Alpha-Beta剪枝"><span class="toc-number">6.</span> <span class="toc-text">Alpha Beta剪枝</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#程式碼"><span class="toc-number">6.0.1.</span> <span class="toc-text">程式碼</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#引用-amp-參考"><span class="toc-number">7.</span> <span class="toc-text">引用&參考:</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-blog-csdn-net-tianranhe-article-details-8301756"><span class="toc-number">7.0.0.0.0.1.</span> <span class="toc-text">引用網址：http://blog.csdn.net/tianranhe/article/details/8301756</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-programmermagazine-github-io-201407-htm-focus3-html"><span class="toc-number">7.0.0.0.0.2.</span> <span class="toc-text">引用網址：http://programmermagazine.github.io/201407/htm/focus3.html</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-blueve-me-archives-825"><span class="toc-number">7.0.0.0.0.3.</span> <span class="toc-text">引用網址：http://blueve.me/archives/825</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#引用網址：http-www-voidcn-com-blog-lihongxun945-cata-6089493"><span class="toc-number">7.0.0.0.0.4.</span> <span class="toc-text">引用網址：http://www.voidcn.com/blog/lihongxun945/cata/6089493/</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#【本文取材並修改自維基百科和以上引用網址】"><span class="toc-number">7.0.0.0.0.5.</span> <span class="toc-text">【本文取材並修改自維基百科和以上引用網址】</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></li></ol>
+</div>
+<input type="button" id="tocButton" value="隱藏目錄"  title="點擊按鈕隱藏或者顯示文章目錄">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隱藏目錄";
+    var valueShow = "顯示目錄";
 
     if ($(".left-col").is(":hidden")) {
         $("#tocButton").attr("value", valueShow);
     }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
     $("#tocButton").click(function() {
         if ($("#toc").is(":hidden")) {
             $("#tocButton").attr("value", valueHide);
@@ -448,7 +477,7 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
 	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
 	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
 	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
-	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到複製網址"></a>
 </div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
@@ -457,10 +486,10 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
 
     
       <div class="duoshuo" id="comments">
-    <!-- 多说评论框 start -->
+    <!-- 多說評論框 start -->
     <div class="ds-thread" data-thread-key="2017/01/25/從零開始五子棋AI學習筆記/" data-title="" data-url="https://andy112247.github.io/2017/01/25/從零開始五子棋AI學習筆記/"></div>
-    <!-- 多说评论框 end -->
-    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <!-- 多說評論框 end -->
+    <!-- 多說公共JS代碼 start (一個網頁只需插入一次) -->
     <script type="text/javascript">
     var duoshuoQuery = {short_name:"null"};
     (function() {
@@ -472,7 +501,7 @@ tags: 五子棋AI AlphaBeta MinMax node.js這是我的第一個線上筆記^^
          || document.getElementsByTagName('body')[0]).appendChild(ds);
     })();
     </script>
-    <!-- 多说公共JS代码 end -->
+    <!-- 多說公共JS代碼 end -->
 </div>
 
     

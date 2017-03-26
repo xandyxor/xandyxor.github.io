@@ -282,18 +282,18 @@ Quick">
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/01/25/hello-world/">Hello World</a></p>
-        <p><span>文章作者:</span><a href="/" title="访问 Andy 的个人博客">Andy</a></p>
-        <p><span>发布时间:</span>2017年01月25日 - 19时01分</p>
-        <p><span>最后更新:</span>2017年03月26日 - 09时02分</p>
+        <p><span>本文標題:</span><a href="/2017/01/25/hello-world/">Hello World</a></p>
+        <p><span>文章作者:</span><a href="/" title="訪問 Andy 的個人部落格">Andy</a></p>
+        <p><span>發布時間:</span>2017年01月25日 - 19時01分</p>
+        <p><span>最後更新:</span>2017年03月26日 - 09時02分</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/01/25/hello-world/" title="Hello World">https://andy112247.github.io/2017/01/25/hello-world/</a>
-            <span class="copy-path" data-clipboard-text="原文: https://andy112247.github.io/2017/01/25/hello-world/　　作者: Andy" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始連結:</span><a class="post-url" href="/2017/01/25/hello-world/" title="Hello World">https://andy112247.github.io/2017/01/25/hello-world/</a>
+            <span class="copy-path" data-clipboard-text="原文: https://andy112247.github.io/2017/01/25/hello-world/　　作者: Andy" title="點擊複製文章連結"><i class="fa fa-clipboard"></i></span>
             <script src="/js/clipboard.min.js"></script>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中国大陆 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 转载请保留原文链接及作者。
+            <span>許可協議:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" title="中華民國 (CC BY-NC-SA 3.0 CN)" target = "_blank">"署名-非商用-相同方式共享 3.0"</a> 轉載請保留原文連結及作者。
         </p>
     </div>
 
@@ -317,19 +317,48 @@ Quick">
 </article>
 
     <div id="toc" class="toc-article">
-    <strong class="toc-title">文章目录</strong>
+    <strong class="toc-title">文章目錄</strong>
     <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
 </div>
-<input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<input type="button" id="tocButton" value="隱藏目錄"  title="點擊按鈕隱藏或者顯示文章目錄">
 
 <script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
 <script>
-    var valueHide = "隐藏目录";
-    var valueShow = "显示目录";
+    var valueHide = "隱藏目錄";
+    var valueShow = "顯示目錄";
+
+    if ($(".left-col").is(":hidden")) {
+        $("#tocButton").attr("value", valueShow);
+    }<div id="toc" class="toc-article">
+    <strong class="toc-title">文章目錄</strong>
+    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Quick-Start"><span class="toc-number">1.</span> <span class="toc-text">Quick Start</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Create-a-new-post"><span class="toc-number">1.1.</span> <span class="toc-text">Create a new post</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Run-server"><span class="toc-number">1.2.</span> <span class="toc-text">Run server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Generate-static-files"><span class="toc-number">1.3.</span> <span class="toc-text">Generate static files</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Deploy-to-remote-sites"><span class="toc-number">1.4.</span> <span class="toc-text">Deploy to remote sites</span></a></li></ol></li></ol>
+</div>
+<input type="button" id="tocButton" value="隱藏目錄"  title="點擊按鈕隱藏或者顯示文章目錄">
+
+<script src="https://7.url.cn/edu/jslib/comb/require-2.1.6,jquery-1.9.1.min.js"></script>
+<script>
+    var valueHide = "隱藏目錄";
+    var valueShow = "顯示目錄";
 
     if ($(".left-col").is(":hidden")) {
         $("#tocButton").attr("value", valueShow);
     }
+    $("#tocButton").click(function() {
+        if ($("#toc").is(":hidden")) {
+            $("#tocButton").attr("value", valueHide);
+            $("#toc").slideDown(320);
+        }
+        else {
+            $("#tocButton").attr("value", valueShow);
+            $("#toc").slideUp(350);
+        }
+    })
+    if ($(".toc").length < 1) {
+        $("#toc, #tocButton").hide();
+    }
+</script>
+
+
     $("#tocButton").click(function() {
         if ($("#toc").is(":hidden")) {
             $("#tocButton").attr("value", valueHide);
@@ -356,7 +385,7 @@ Quick">
 	<a href="#" class="fx fa-facebook-official bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
 	<a href="#" class="fx fa-twitter bds_twi" data-cmd="twi" title="分享到Twitter"></a>
 	<a href="#" class="fx fa-linkedin bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
-	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+	<a href="#" class="fx fa-files-o bds_copy" data-cmd="copy" title="分享到複製網址"></a>
 </div>
 <script>window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"2","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];</script>
 
@@ -365,10 +394,10 @@ Quick">
 
     
       <div class="duoshuo" id="comments">
-    <!-- 多说评论框 start -->
+    <!-- 多說評論框 start -->
     <div class="ds-thread" data-thread-key="2017/01/25/hello-world/" data-title="Hello World" data-url="https://andy112247.github.io/2017/01/25/hello-world/"></div>
-    <!-- 多说评论框 end -->
-    <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
+    <!-- 多說評論框 end -->
+    <!-- 多說公共JS代碼 start (一個網頁只需插入一次) -->
     <script type="text/javascript">
     var duoshuoQuery = {short_name:"null"};
     (function() {
@@ -380,7 +409,7 @@ Quick">
          || document.getElementsByTagName('body')[0]).appendChild(ds);
     })();
     </script>
-    <!-- 多说公共JS代码 end -->
+    <!-- 多說公共JS代碼 end -->
 </div>
 
     
