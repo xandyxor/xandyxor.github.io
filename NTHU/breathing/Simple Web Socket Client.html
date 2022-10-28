@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html;">
+	<!-- <link rel="stylesheet" type="text/css" href="css/reset.css"> -->
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div id="content" class="container">
+		<H3>Server Location</H3>
+		<div class="container">
+			<label>URL:</label>
+			<input type="text" id="serverUrl" value="ws://192.168.1.114:81">
+			<button id="connectButton">Connect</button>
+			<button id="disconnectButton">Disconnect</button>
+		</div>
+		<div>
+			<label>Status:</label>
+			<span id="connectionStatus">CLOSED</span>
+		</div>
+
+		<H3>I2S Setting</H3>
+		<div class="container">
+			<br>
+			<!--<textarea id="sendMessage" disabled="disabled"></textarea> -->
+			<label>Time (Sec)</label>
+			<input type="number" id="recTime" value="5">
+			<br>
+
+
+			<label>Bit Per Sample (BPS)</label>
+			<select id="bps">
+				<option value="16" selected="">16</option>
+				<option value="24" disabled="">24</option>
+			</select>
+			<br>
+
+			<label> Sampling Rate (Hz)</label>
+			<select id="sampleRate">
+				<option value="16000">16000</option>
+				<option value="44100">44100</option>
+				<option value="22050" selected="">22050</option>
+
+				<option value="96000">96000</option>
+			</select>
+			<br>
+
+			<label> Channel </label>
+			<select id="channel">
+				<option value="1" selected="">Mono</option>
+				<option value="2">Stereo</option>
+			</select>
+			<br>
+
+			<label> I2S Poart</label>
+			<select id="i2sPort">
+				<option value="0" selected="">I2S 0</option>
+				<option value="1">I2S 1</option>
+			</select>
+			<br>
+
+			<button id="sendButton" disabled="disabled">Start Rec</button>
+			<br><br>
+		</div>
+
+		<H3>Recording Progress</H3>
+		<label>DOWNLOAD : </label> <input type="text" id="fileName" value="Recording.wav">
+		<button id="download">Download</button>
+		<br><br>
+
+		<div id="myProgress" class="container">
+			<div id="myBar"></div>
+		</div>
+
+		<H3>Message Log <button id="clearMessage">Clear</button></H3>
+		<div id="messages" class="container">
+			<!-- <textarea id="messages" style="width: 99%;"></textarea> -->
+		</div>
+	</div>
+
+
+	<script type="text/javascript" src="js/jquery-1.4.3.min.js"></script>
+	<script type="text/javascript" src="js/index.js"></script>
+
+</body>
+
+</html>
