@@ -156,15 +156,21 @@ function onRecord() {
 
       // we must turn on the LED / torch
       const track = mediaStreamObj.getVideoTracks()[0];
-      const imageCapture = new ImageCapture(track)
+      const imageCapture = new ImageCapture(track);
       const photoCapabilities = imageCapture.getPhotoCapabilities()
         .then(() => {
           track.applyConstraints({
               advanced: [{ torch: true }]
             })
-            .catch(err => console.log('No torch', err));
+            .catch(err => {
+              console.log('No torch', err);
+              document.getElementById('error-message').innerHTML = '無法打開手電筒';
+            });
         })
-        .catch(err => console.log('No torch', err));
+        .catch(err => {
+          console.log('No torch', err);
+          document.getElementById('error-message').innerHTML = '無法打開手電筒';
+        });
 
       video = document.getElementById('video');
       if (inProduction) {
@@ -191,7 +197,10 @@ function onRecord() {
         console.log('paused');
       };
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+      console.log(error);
+      document.getElementById('error-message').innerHTML = '攝影機出現錯誤';
+    });
 }
 
 function pauseVideo() {
