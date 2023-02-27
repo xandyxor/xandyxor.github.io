@@ -1,3 +1,4 @@
+import ImageCapturePolyfill from 'imagecapture-polyfill'; 
 document.querySelector('#record').addEventListener('click', onRecord);
 
 const inProduction = true; // hide video and tmp canvas
@@ -45,63 +46,73 @@ function setWH() {
 
 function init() {
   c_tmp = document.getElementById('output-canvas');
+
+  // 修改為使用canvas.style.display屬性來隱藏元素
   if (inProduction) {
     c_tmp.style.display = 'none';
   }
+
   ctx_tmp = c_tmp.getContext('2d');
 }
 
 function computeFrame() {
-  if (nFrame > DURATION) {
+  if (nFrame > DURATION && !video.paused) {
     ctx_tmp.drawImage(video,
       0, 0, video.videoWidth, video.videoHeight);
-    let frame = ctx_tmp.getImageData(
-      0, 0, video.videoWidth, video.videoHeight);
 
-    // process each frame
-    const count = frame.data.length / 4;
-    let rgbRed = 0;
-    for (let i = 0; i < count; i++) {
-      rgbRed += frame.data[i * 4];
-    }
-    // invert to plot the PPG signal
-    xMean = 1 - rgbRed / (count * 255);
+    let img = new Image();
+    img.src = c_tmp.toDataURL();
 
-    let xMeanData = {
-      time: (new Date() - initTime) / 1000,
-      x: xMean
-    };
+    img.onload = function() {
+      ctx_tmp.drawImage(img, 0, 0);
+      let frame = ctx_tmp.getImageData(
+        0, 0, video.videoWidth, video.videoHeight);
 
-    acdc[nFrame % WINDOW_LENGTH] = xMean;
-
-    // TODO: calculate AC from AC-DC only each WINDOW_LENGTH time:
-    if (nFrame % WINDOW_LENGTH == 0) {
-      // console.log(`nFrame = ${nFrame}`);
-      // console.log(`ac = ${acdc}`);
-      // console.log(`ac-detrended = ${detrend(acdc)}`);
-      document.getElementById('signal-window').innerHTML = `nWindow: ${nFrame / WINDOW_LENGTH}`;
-      if ((nFrame / 100) % 2 == 0) {
-        isSignal = 1;
-        ac = detrend(acdc);
-        acWindow = windowMean(ac);
-      } else {
-        ac = Array(WINDOW_LENGTH).fill(acWindow);
-        isSignal = 0;
+      // process each frame
+      const count = frame.data.length / 4;
+      let rgbRed = 0;
+      for (let i = 0; i < count; i++) {
+        rgbRed += frame.data[i * 4];
       }
-    }
+      // invert to plot the PPG signal
+      xMean = 1 - rgbRed / (count * 255);
 
-    acFrame = ac[nFrame % WINDOW_LENGTH];
+      let xMeanData = {
+        time: (new Date() - initTime) / 1000,
+        x: xMean
+      };
 
-    xMeanArr.push(xMeanData);
+      acdc[nFrame % WINDOW_LENGTH] = xMean;
 
-    document.getElementById('frame-time').innerHTML = `Frame time: ${xMeanData.time.toFixed(2)}`;
-    document.getElementById('video-time').innerHTML = `Video time: ${(video.currentTime.toFixed(2))}`;
-    document.getElementById('signal').innerHTML = `X: ${xMeanData.x}`;
+      // TODO: calculate AC from AC-DC only each WINDOW_LENGTH time:
+      if (nFrame % WINDOW_LENGTH == 0) {
+        // console.log(`nFrame = ${nFrame}`);
+        // console.log(`ac = ${acdc}`);
+        // console.log(`ac-detrended = ${detrend(acdc)}`);
+        document.getElementById('signal-window').innerHTML = `nWindow: ${nFrame / WINDOW_LENGTH}`;
+        if ((nFrame / 100) % 2 == 0) {
+          isSignal = 1;
+          ac = detrend(acdc);
+          acWindow = windowMean(ac);
+        } else {
+          ac = Array(WINDOW_LENGTH).fill(acWindow);
+          isSignal = 0;
+        }
+      }
 
-    const fps = (++frameCount / video.currentTime).toFixed(3);
-    document.getElementById('frame-fps').innerHTML = `Frame count: ${frameCount}, FPS: ${fps}`;
+      acFrame = ac[nFrame % WINDOW_LENGTH];
 
-    ctx_tmp.putImageData(frame, 0, 0);
+      xMeanArr.push(xMeanData);
+
+      document.getElementById('frame-time').innerHTML = `Frame time: ${xMeanData.time.toFixed(2)}`;
+      document.getElementById('video-time').innerHTML = `Video time: ${(video.currentTime.toFixed(2))}`;
+      document.getElementById('signal').innerHTML = `X: ${xMeanData.x}`;
+
+      const fps = (++frameCount / video.currentTime).toFixed(3);
+      document.getElementById('frame-fps').innerHTML = `Frame count: ${frameCount}, FPS: ${fps}`;
+
+      ctx_tmp.putImageData(frame, 0, 0);
+    };
   }
   nFrame += 1;
   setTimeout(computeFrame, delay); // continue with delay
@@ -151,56 +162,53 @@ function detrend(y) {
 
 function onRecord() {
   this.disabled = true;
+
+  const captureStream = stream => {
+    const settings = stream.getTracks()[0].getSettings();
+    const track = stream.getVideoTracks()[0];
+    track.applyConstraints({
+        advanced: [{ torch: true }]
+      })
+      .catch(err => {
+        console.log('No torch', err);
+        document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒' + err;
+      });
+
+    video = document.getElementById('video');
+    if (inProduction) {
+      video.style.display = 'none';
+    }
+
+    video.srcObject = stream;
+
+    video.onloadedmetadata = function(ev) {
+      video.play();
+    };
+
+    init();
+    video.addEventListener('loadedmetadata', setWH);
+    video.addEventListener('timeupdate', computeFrame);
+    video.addEventListener('timeupdate', drawLineChart);
+
+    video.onpause = function() {
+      console.log('paused');
+    };
+  };
+
   navigator.mediaDevices.getUserMedia(constraintsObj)
-    .then(function(mediaStreamObj) {
-
-      // we must turn on the LED / torch
-      const track = mediaStreamObj.getVideoTracks()[0];
-      const imageCapture = new ImageCapture(track);
-      const photoCapabilities = imageCapture.getPhotoCapabilities()
-        .then(() => {
-          track.applyConstraints({
-              advanced: [{ torch: true }]
-            })
-            .catch(err => {
-              console.log('No torch', err);
-              document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
-            });
-        })
-        .catch(err => {
-          console.log('No torch', err);
-          document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
-        });
-
-      video = document.getElementById('video');
-      if (inProduction) {
-        video.style.display = 'none';
-      }
-
-      if ("srcObject" in video) {
-        video.srcObject = mediaStreamObj;
-      } else {
-        // for older versions of browsers
-        video.src = window.URL.createObjectURL(mediaStreamObj);
-      }
-
-      video.onloadedmetadata = function(ev) {
-        video.play();
-      };
-
-      init();
-      video.addEventListener('play', setWH);
-      video.addEventListener('play', computeFrame);
-      video.addEventListener('play', drawLineChart);
-
-      video.onpause = function() {
-        console.log('paused');
-      };
-    })
+    .then(captureStream)
     .catch(error => {
       console.log(error);
-      document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤'+error;
+      document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤' + error;
     });
+
+  // add error handler for ImageCapture API
+  const track = video.srcObject.getVideoTracks()[0];
+  const imageCapture = new ImageCapturePolyfill(track);
+  imageCapture.onerror = function(error) {
+    console.log(error);
+    document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤' + error;
+  };
 }
 
 function pauseVideo() {
@@ -244,11 +252,54 @@ function resize() {
   d3.select("#chart").call(chart);
 }
 
+// function drawLineChart() {
+//   initTime = new Date();
+
+//   seedData();
+//   window.setInterval(updateData, 100);
+//   d3.select("#chart").datum(lineArr).call(chart);
+//   d3.select(window).on('resize', resize);
+// }
 function drawLineChart() {
   initTime = new Date();
 
   seedData();
-  window.setInterval(updateData, 100);
+  window.setInterval(function() {
+    if (!video.paused) {
+      updateData();
+    }
+  }, 100);
+
+  chart.width("100%");
   d3.select("#chart").datum(lineArr).call(chart);
   d3.select(window).on('resize', resize);
+
+  // change mouse events to touch events for mobile devices
+  d3.select("#chart").on("touchstart", function() {
+    d3.event.preventDefault();
+    let p = d3.touches(this)[0];
+    let x = chart.x.invert(p[0]);
+    chart.line.append("rect")
+      .attr("class", "zoom")
+      .attr("width", chart.x(chart.x.domain()[0] + chart.xStep) - chart.x(chart.x.domain()[0]))
+      .attr("height", chart.height)
+      .attr("x", chart.x(x) - (chart.x(chart.x.domain()[0] + chart.xStep) - chart.x(chart.x.domain()[0])) / 2)
+      .attr("y", 0);
+  })
+  .on("touchmove", function() {
+    d3.event.preventDefault();
+    let p = d3.touches(this)[0];
+    let x = chart.x.invert(p[0]);
+    let zoom = d3.select("rect.zoom");
+    chart.zoom(chart.x.domain()[0], x);
+    zoom.attr("x", chart.x(x) - (chart.x(chart.x.domain()[0] + chart.xStep) - chart.x(chart.x.domain()[0])) / 2);
+  })
+  .on("touchend", function() {
+    d3.event.preventDefault();
+    let zoom = d3.select("rect.zoom");
+    let x1 = chart.x.invert(zoom.attr("x"));
+    let x2 = chart.x.invert(+zoom.attr("x") + +zoom.attr("width"));
+    chart.zoom(x1, x2);
+    zoom.remove();
+  });
 }
