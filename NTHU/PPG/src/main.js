@@ -164,12 +164,12 @@ function onRecord() {
             })
             .catch(err => {
               console.log('No torch', err);
-              document.getElementById('error-message').innerHTML = '無法打開手電筒'+err;
+              document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
             });
         })
         .catch(err => {
           console.log('No torch', err);
-          document.getElementById('error-message').innerHTML = '無法打開手電筒'+err;
+          document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
         });
 
       video = document.getElementById('video');
@@ -199,7 +199,7 @@ function onRecord() {
     })
     .catch(error => {
       console.log(error);
-      document.getElementById('error-message').innerHTML = '攝影機出現錯誤'+error;
+      document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤'+error;
     });
 }
 
