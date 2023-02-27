@@ -163,54 +163,76 @@ function detrend(y) {
 function onRecord() {
   this.disabled = true;
 
-  const captureStream = stream => {
-    const settings = stream.getTracks()[0].getSettings();
-    const track = stream.getVideoTracks()[0];
-    track.applyConstraints({
-        advanced: [{ torch: true }]
-      })
-      .catch(err => {
-        console.log('No torch', err);
-        document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒' + err;
-      });
-
-    video = document.getElementById('video');
-    if (inProduction) {
-      video.style.display = 'none';
-    }
-
-    video.srcObject = stream;
-
-    video.onloadedmetadata = function(ev) {
-      video.play();
-    };
-
-    init();
-    video.addEventListener('loadedmetadata', setWH);
-    video.addEventListener('timeupdate', computeFrame);
-    video.addEventListener('timeupdate', drawLineChart);
-
-    video.onpause = function() {
-      console.log('paused');
-    };
-  };
+  // Check if ImageCapture is supported, use polyfill if not
+  const isImageCaptureSupported = 'ImageCapture' in window;
+  const polyfill = !isImageCaptureSupported && ImageCapturePolyfill;
 
   navigator.mediaDevices.getUserMedia(constraintsObj)
-    .then(captureStream)
+    .then(function(mediaStreamObj) {
+      // we must turn on the LED / torch
+      const track = mediaStreamObj.getVideoTracks()[0];
+      if (polyfill) {
+        const imageCapture = new polyfill.ImageCapture(track);
+        track.applyConstraints({
+            advanced: [{ torch: true }]
+          })
+          .catch(err => {
+            console.log('No torch', err);
+            document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
+          });
+
+        const videoCanvas = document.createElement('video');
+        videoCanvas.srcObject = mediaStreamObj;
+        videoCanvas.id = 'video-canvas';
+        document.body.appendChild(videoCanvas);
+      } else {
+        const imageCapture = new ImageCapture(track);
+        const photoCapabilities = imageCapture.getPhotoCapabilities()
+          .then(() => {
+            track.applyConstraints({
+                advanced: [{ torch: true }]
+              })
+              .catch(err => {
+                console.log('No torch', err);
+                document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
+              });
+          })
+          .catch(err => {
+            console.log('No torch', err);
+            document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒'+err;
+          });
+      }
+
+      video = document.getElementById('video');
+      if (inProduction) {
+        video.style.display = 'none';
+      }
+
+      if ("srcObject" in video) {
+        video.srcObject = mediaStreamObj;
+      } else {
+        // for older versions of browsers
+        video.src = window.URL.createObjectURL(mediaStreamObj);
+      }
+
+      video.onloadedmetadata = function(ev) {
+        video.play();
+      };
+
+      init();
+      video.addEventListener('play', setWH);
+      video.addEventListener('play', computeFrame);
+      video.addEventListener('play', drawLineChart);
+
+      video.onpause = function() {
+        console.log('paused');
+      };
+    })
     .catch(error => {
       console.log(error);
-      document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤' + error;
+      document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤'+error;
     });
-
-  // add error handler for ImageCapture API
-  const track = video.srcObject.getVideoTracks()[0];
-  const imageCapture = new ImageCapturePolyfill(track);
-  imageCapture.onerror = function(error) {
-    console.log(error);
-    document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤' + error;
-  };
 }
-
 function pauseVideo() {
   video.pause();
   video.currentTime = 0;
