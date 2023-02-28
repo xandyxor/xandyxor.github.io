@@ -35,81 +35,27 @@ let constraintsObj = {
   }
 };
 
-// function setWH() {
-//   let [w, h] = [video.videoWidth, video.videoHeight];
-//   document.getElementById('delay').innerHTML = `Frame compute delay: ${delay}`;
-//   document.getElementById('resolution').innerHTML = `Video resolution: ${w} x ${h}`;
-//   c_tmp.setAttribute('width', w);
-//   c_tmp.setAttribute('height', h);
-// }
 function setWH() {
-  let [w, h] = [video.videoWidth, video.videoHeight];
-  document.getElementById('delay').innerHTML = `Frame compute delay: ${delay}`;
-  document.getElementById('resolution').innerHTML = `Video resolution: ${w} x ${h}`;
-  c_tmp.width = w; // Set canvas width directly
-  c_tmp.height = h; // Set canvas height directly
+  setTimeout(function() {
+    // 設置 canvas 寬度和高度
+    let [w, h] = [video.videoWidth, video.videoHeight];
+    document.getElementById('delay').innerHTML = `Frame compute delay: ${delay}`;
+    document.getElementById('resolution').innerHTML = `Video resolution: ${w} x ${h}`;
+    c_tmp.setAttribute('width', w);
+    c_tmp.setAttribute('height', h);
+  }, 1000); // 等待 1 秒
+
 }
 
 function init() {
   c_tmp = document.getElementById('output-canvas');
+
+  // 修改為使用canvas.style.display屬性來隱藏元素
   if (inProduction) {
     c_tmp.style.display = 'none';
   }
+
   ctx_tmp = c_tmp.getContext('2d');
-
-  // Add this line to set the willReadFrequently attribute
-  ctx_tmp.imageSmoothingEnabled = true;
-  ctx_tmp.webkitImageSmoothingEnabled = true;
-  ctx_tmp.mozImageSmoothingEnabled = true;
-  ctx_tmp.msImageSmoothingEnabled = true;
-  ctx_tmp.oImageSmoothingEnabled = true;
-  ctx_tmp.imageSmoothingQuality = 'high';
-  ctx_tmp.canvas.willReadFrequently = true;
-
-  navigator.mediaDevices.getUserMedia(constraintsObj)
-    .then(function(mediaStreamObj) {
-      video = document.getElementById('video');
-      if (inProduction) {
-        video.style.display = 'none';
-      }
-
-      if ("srcObject" in video) {
-        video.srcObject = mediaStreamObj;
-      } else {
-        video.src = window.URL.createObjectURL(mediaStreamObj);
-      }
-
-      video.onloadedmetadata = function(ev) {
-        setWH(); // Set canvas dimensions to match video dimensions
-        video.play();
-      };
-
-      // Turn on torch
-      const track = mediaStreamObj.getVideoTracks()[0];
-      const imageCapture = new ImageCapture(track);
-      const photoCapabilities = imageCapture.getPhotoCapabilities()
-        .then(() => {
-          track.applyConstraints({
-              advanced: [{ torch: true }]
-            })
-            .catch(err => console.log('No torch', err));
-        })
-        .catch(err => console.log('No torch', err));
-
-      video.addEventListener('play', computeFrame);
-      video.addEventListener('play', drawLineChart);
-
-      video.onpause = function() {
-        console.log('paused');
-      };
-    })
-    .catch(error => {
-      console.error(error);
-      const errorMessage = document.getElementById('error-message');
-      errorMessage.textContent = 'Failed to access camera';
-      video.style.display = 'none';
-      c_tmp.style.display = 'none';
-    });
 }
 
 function computeFrame() {
@@ -212,8 +158,47 @@ function detrend(y) {
 
 function onRecord() {
   this.disabled = true;
+
+  // Check if ImageCapture is supported, use polyfill if not
+  const isImageCaptureSupported = 'ImageCapture' in window;
+  const polyfill = !isImageCaptureSupported && ImageCapturePolyfill;
+
   navigator.mediaDevices.getUserMedia(constraintsObj)
     .then(function(mediaStreamObj) {
+      // we must turn on the LED / torch
+      const track = mediaStreamObj.getVideoTracks()[0];
+      if (polyfill) {
+        const imageCapture = new polyfill.ImageCapture(track);
+        track.applyConstraints({
+            advanced: [{ torch: true }]
+          })
+          .catch(err => {
+            console.log('No torch', err);
+            document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒' + err;
+          });
+
+        const videoCanvas = document.createElement('video');
+        videoCanvas.srcObject = mediaStreamObj;
+        videoCanvas.id = 'video-canvas';
+        document.body.appendChild(videoCanvas);
+      } else {
+        const imageCapture = new ImageCapture(track);
+        const photoCapabilities = imageCapture.getPhotoCapabilities()
+          .then(() => {
+            track.applyConstraints({
+                advanced: [{ torch: true }]
+              })
+              .catch(err => {
+                console.log('No torch', err);
+                document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒' + err;
+              });
+          })
+          .catch(err => {
+            console.log('No torch', err);
+            document.getElementById('error-message').innerHTML = '錯誤：無法打開手電筒' + err;
+          });
+      }
+
       video = document.getElementById('video');
       if (inProduction) {
         video.style.display = 'none';
@@ -222,27 +207,16 @@ function onRecord() {
       if ("srcObject" in video) {
         video.srcObject = mediaStreamObj;
       } else {
+        // for older versions of browsers
         video.src = window.URL.createObjectURL(mediaStreamObj);
       }
 
       video.onloadedmetadata = function(ev) {
-        setWH(); // Set canvas dimensions to match video dimensions
         video.play();
       };
 
-      // Turn on torch
-      const track = mediaStreamObj.getVideoTracks()[0];
-      const imageCapture = new ImageCapture(track);
-      const photoCapabilities = imageCapture.getPhotoCapabilities()
-        .then(() => {
-          track.applyConstraints({
-              advanced: [{ torch: true }]
-            })
-            .catch(err => console.log('No torch', err));
-        })
-        .catch(err => console.log('No torch', err));
-
       init();
+      video.addEventListener('play', setWH);
       video.addEventListener('play', computeFrame);
       video.addEventListener('play', drawLineChart);
 
@@ -250,8 +224,24 @@ function onRecord() {
         console.log('paused');
       };
     })
-    .catch(error => console.log(error));
+    .catch(error => {
+      console.log(error);
+      document.getElementById('error-message').innerHTML = '錯誤：攝影機出現錯誤' + error;
+      video = document.getElementById('video');
+      if (inProduction) {
+        video.style.display = 'none';
+      }
+      init();
+      video.addEventListener('play', setWH);
+      video.addEventListener('play', computeFrame);
+      video.addEventListener('play', drawLineChart);
+
+      video.onpause = function() {
+        console.log('paused');
+      };
+    });
 }
+
 
 function pauseVideo() {
   video.pause();
@@ -294,11 +284,54 @@ function resize() {
   d3.select("#chart").call(chart);
 }
 
+// function drawLineChart() {
+//   initTime = new Date();
+
+//   seedData();
+//   window.setInterval(updateData, 100);
+//   d3.select("#chart").datum(lineArr).call(chart);
+//   d3.select(window).on('resize', resize);
+// }
 function drawLineChart() {
   initTime = new Date();
 
   seedData();
-  window.setInterval(updateData, 100);
+  window.setInterval(function() {
+    if (!video.paused) {
+      updateData();
+    }
+  }, 100);
+
+  chart.width("100%");
   d3.select("#chart").datum(lineArr).call(chart);
   d3.select(window).on('resize', resize);
+
+  // change mouse events to touch events for mobile devices
+  d3.select("#chart").on("touchstart", function() {
+    d3.event.preventDefault();
+    let p = d3.touches(this)[0];
+    let x = chart.x.invert(p[0]);
+    chart.line.append("rect")
+      .attr("class", "zoom")
+      .attr("width", chart.x(chart.x.domain()[0] + chart.xStep) - chart.x(chart.x.domain()[0]))
+      .attr("height", chart.height)
+      .attr("x", chart.x(x) - (chart.x(chart.x.domain()[0] + chart.xStep) - chart.x(chart.x.domain()[0])) / 2)
+      .attr("y", 0);
+  })
+  .on("touchmove", function() {
+    d3.event.preventDefault();
+    let p = d3.touches(this)[0];
+    let x = chart.x.invert(p[0]);
+    let zoom = d3.select("rect.zoom");
+    chart.zoom(chart.x.domain()[0], x);
+    zoom.attr("x", chart.x(x) - (chart.x(chart.x.domain()[0] + chart.xStep) - chart.x(chart.x.domain()[0])) / 2);
+  })
+  .on("touchend", function() {
+    d3.event.preventDefault();
+    let zoom = d3.select("rect.zoom");
+    let x1 = chart.x.invert(zoom.attr("x"));
+    let x2 = chart.x.invert(+zoom.attr("x") + +zoom.attr("width"));
+    chart.zoom(x1, x2);
+    zoom.remove();
+  });
 }
