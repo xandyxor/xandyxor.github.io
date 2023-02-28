@@ -1,4 +1,3 @@
-import ImageCapturePolyfill from 'imagecapture-polyfill'; 
 document.querySelector('#record').addEventListener('click', onRecord);
 
 const inProduction = true; // hide video and tmp canvas
