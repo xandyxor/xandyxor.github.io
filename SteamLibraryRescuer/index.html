@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Steam Library Rescuer - ACF File Repair</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+    <style>
+        :root {
+            --steam-dark: #1b2838;
+            --steam-mid: #2a475e;
+            --steam-light: #66c0f4;
+            --text-color: #c7d5e0;
+            --highlight: #5c7e9a;
+            --card-bg: #1e3146;
+            --success-color: #4CAF50;
+            --error-color: #f44336;
+            --secondary-button: #4a6b83; 
+            --table-row-hover: #213c53;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--steam-dark);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* 標頭樣式 */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex; 
+            align-items: center;
+            justify-content: center;
+        }
+        h1 i {
+            font-size: 1.2em;
+            margin-right: 10px;
+            color: var(--steam-light);
+        }
+        header p {
+            color: var(--highlight);
+            font-size: 1.1em; 
+        }
+
+        /* 主容器 (卡片) */
+        .main-card {
+            max-width: 900px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+        }
+
+        /* 步驟指示器 */
+        .step-indicator {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background-color: var(--highlight);
+            z-index: 0;
+        }
+        
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+            cursor: default;
+        }
+        
+        /* 圓圈數字 (基本樣式) */
+        .step-number {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--highlight); 
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-bottom: 5px;
+            transition: all 0.3s;
+            box-sizing: border-box; 
+            border: 2px solid var(--highlight); 
+            font-size: 1em; 
+            position: relative; 
+        }
+        
+        /* 正在進行的步驟 (Active) */
+        .step.active .step-number {
+            background-color: var(--card-bg); 
+            border-color: var(--steam-light); 
+            color: var(--steam-light);
+            box-shadow: 0 0 10px rgba(102, 192, 244, 0.4);
+        }
+        
+        /* 步驟完成圖標 (Completed Checkmark) - 使用內嵌 SVG */
+        .step.completed .step-number {
+            background-color: var(--card-bg); 
+            border-color: var(--steam-light); 
+            color: var(--steam-light); 
+            font-size: 0; /* 隱藏數字 */
+        }
+        
+        /* 設置 SVG 容器 */
+        .step.completed .step-number::after {
+            content: '';
+            display: block;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            /* 內嵌 SVG */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cpath fill='%2366c0f4' d='M256 0c141.4 0 256 114.6 256 256S397.4 512 256 512 0 397.4 0 256 114.6 0 256 0zm-7.6 308.8l-72-72c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6l83.6 83.6c6.2 6.2 16.4 6.2 22.6 0l168-168c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0l-156 156z'/%3E%3C/svg%3E");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center;
+        }
+
+        .step-title {
+            font-size: 0.9em;
+            color: var(--highlight);
+        }
+        
+        /* 正在進行和已完成的標題變亮 */
+        .step.active .step-title,
+        .step.completed .step-title {
+            color: white;
+        }
+
+        /* 內容區塊 */
+        .content-section {
+            margin-bottom: 25px;
+            padding-top: 15px;
+        }
+        h2 {
+            color: white;
+            margin-top: 0;
+            font-size: 1.5em;
+        }
+
+        /* 輸入與按鈕 */
+        input[type="file"], textarea {
+            background-color: var(--steam-mid);
+            border: 1px solid var(--highlight);
+            color: var(--text-color);
+            padding: 10px;
+            border-radius: 4px;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 8px;
+            margin-bottom: 15px;
+        }
+        textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        /* 主要行動按鈕樣式 */
+        button {
+            background-color: var(--success-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 15px;
+        }
+        button:hover {
+            background-color: #43A047;
+        }
+        /* Go to Step 3 按鈕 (藍色) */
+        button#goToStep3Button {
+            background-color: var(--steam-light); 
+            color: var(--steam-dark);
+            margin-top: 20px;
+            display: none; /* 預設隱藏，識別完成後顯示 */
+        }
+        button#goToStep3Button:hover {
+             background-color: #5ab1e6;
+        }
+        
+        /* 輔助按鈕專屬樣式 */
+        button#toggleOptionBButton {
+            background-color: var(--secondary-button); 
+            color: var(--text-color);
+            padding: 10px 18px; 
+            font-weight: normal;
+            margin-top: 5px; 
+            margin-bottom: 15px;
+            width: 100%; 
+            text-align: center;
+        }
+        button#toggleOptionBButton:hover {
+            background-color: var(--highlight);
+        }
+        
+        /* 狀態訊息 */
+        .status-message {
+            padding: 10px;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            display: none; 
+        }
+        .status-success {
+            background-color: rgba(76, 175, 80, 0.2);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+            display: block;
+        }
+        .status-error {
+            background-color: rgba(244, 67, 54, 0.2);
+            border: 1px solid var(--error-color);
+            color: var(--error-color);
+            display: block;
+        }
+
+        /* 結果列表 (步驟 2) */
+        .game-list-container {
+            margin-top: 15px;
+        }
+        .detected-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .detected-header h3 {
+            margin: 0;
+            margin-right: 10px;
+            color: var(--text-color);
+            font-size: 1.2em;
+        }
+        /* Detected Count 數字氣泡 */
+        .detected-header span {
+            background-color: var(--steam-mid);
+            color: var(--steam-light);
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        /* 遊戲列表滾動容器 */
+        .game-list-wrapper {
+            max-height: 400px; /* 設定最大高度 */
+            overflow-y: auto; /* 啟用垂直滾動 */
+            border-radius: 6px; /* 保持圓角 */
+            background-color: var(--steam-mid);
+        }
+
+        /* 表格主體樣式 */
+        .game-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            background-color: var(--steam-mid);
+        }
+        
+        /* 保持表頭固定在滾動條上方 */
+        .game-table thead {
+            background-color: var(--secondary-button);
+            position: sticky; 
+            top: 0;
+            z-index: 10;
+        }
+
+        /* 調整表格內間距 */
+        .game-table th {
+            color: white;
+            padding: 8px 10px; /* 減小垂直間距 */
+            text-align: left;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+
+        .game-table td {
+            padding: 8px 10px; /* 減小垂直間距 */
+            border-top: 1px solid var(--highlight);
+            vertical-align: middle;
+            font-size: 0.9em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .game-table tbody tr:hover {
+            background-color: var(--table-row-hover);
+        }
+
+
+        /* 調整列寬 */
+        .game-table th:nth-child(1), .game-table td:nth-child(1) { width: 30%; } 
+        .game-table th:nth-child(2), .game-table td:nth-child(2) { width: 30%; } 
+        .game-table th:nth-child(3), .game-table td:nth-child(3) { width: 15%; } 
+        .game-table th:nth-child(4), .game-table td:nth-child(4) { width: 15%; } 
+        .game-table th:nth-child(5), .game-table td:nth-child(5) { width: 10%; text-align: center; } 
+
+        /* 狀態圖標 (loading, success, error) */
+        .status-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: auto; 
+            height: 20px;
+            width: 20px;
+            border-radius: 50%;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: white;
+            box-sizing: border-box;
+            /* 這些仍然依賴 Font Awesome */
+            font-family: "Font Awesome 6 Free";
+            font-weight: 900;
+            background: none;
+            color: transparent; 
+        }
+
+        /* 載入中 (旋轉) */
+        .status-icon.loading::before {
+            content: "\f110"; /* fa-circle-notch */
+            color: var(--steam-light);
+            animation: spin 1s linear infinite;
+        }
+        /* 待處理 (Pending) */
+        .status-icon.pending::before {
+             content: "\f111"; /* fa-circle */
+             color: var(--highlight);
+             animation: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* 成功和失敗圖標 (保留 Font Awesome 讓表格圖標一致) */
+        .status-icon.success::before {
+            content: "\f058"; /* fa-check-circle */
+            color: var(--success-color);
+        }
+        .status-icon.error::before {
+            content: "\f057"; /* fa-times-circle */
+            color: var(--error-color);
+        }
+
+
+        /* 刪除按鈕 */
+        .remove-btn {
+            background: none;
+            border: none;
+            color: var(--highlight);
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: color 0.2s;
+            line-height: 1; 
+        }
+        .remove-btn:hover {
+            color: var(--error-color);
+        }
+        
+        /* 步驟切換容器 */
+        .step-content {
+            display: none;
+        }
+        .step-content.active {
+            display: block;
+        }
+        
+        /* 輔助文字 */
+        .help-text {
+            font-size: 0.9em;
+            color: var(--highlight);
+            margin-bottom: 10px;
+        }
+        
+        /* 安全說明 (Security Note) */
+        .security-note {
+            font-size: 0.9em;
+            color: #ff9800; /* 警告色 */
+            margin-top: 5px;
+            font-weight: bold;
+            padding: 10px;
+            border: 1px solid #ff980050;
+            background-color: #ff980010;
+            border-radius: 4px;
+        }
+
+        .separator {
+            border-top: 1px dashed var(--highlight);
+            margin: 20px 0;
+        }
+
+        /* 折疊 Option B 區塊 */
+        .option-b-collapsible {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-in-out;
+            padding-top: 0;
+        }
+        .option-b-collapsible.expanded {
+            max-height: 500px;
+            padding-top: 10px;
+        }
+        
+        /* 頁腳 */
+        footer {
+            margin-top: 40px;
+            font-size: 0.8em;
+            color: var(--highlight);
+            text-align: center;
+        }
+        
+        .download-link {
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>
+            <i class="fa-solid fa-database"></i> 
+            Steam Library Rescuer
+        </h1>
+        <p>This tool scans your existing game folders, infers the Steam AppID for each, and generates the necessary <code>appmanifest_xxxxx.acf</code> files, allowing Steam to recognize your installed games again.</p>
+    </header>
+
+    <div class="main-card">
+        <div class="step-indicator">
+            <div id="step1" class="step active">
+                <div class="step-number">1</div>
+                <div class="step-title">Select Folder</div>
+            </div>
+            <div id="step2" class="step">
+                <div class="step-number">2</div>
+                <div class="step-title">Scan & Identify</div>
+            </div>
+            <div id="step3" class="step">
+                <div class="step-number">3</div>
+                <div class="step-title">Download Fix</div>
+            </div>
+        </div>
+
+        <div id="content1" class="step-content active content-section">
+            <h2>Step 1: Select Game Folders</h2>
+            
+            <h3>Option A (Recommended): Select 'common' folder</h3>
+            
+            <p class="help-text">Please select your Steam <code>steamapps/common</code> folder. (E.g. <code>C:\Program Files (x86)\Steam\steamapps\common</code>). The tool will automatically extract all game folder names.</p>
+            
+            <p class="help-text">⚠️ Privacy & Security Note: This tool only reads the folder names and file names within your selected directory. Your game content or any personal files are NOT uploaded to any server. All processing is performed locally in your browser.</p>
+            
+            <input type="file" id="folderDirectoryInput" webkitdirectory directory multiple>
+            <div id="folderStatus" class="status-message"></div>
+            
+            <div class="separator"></div>
+            
+            <button onclick="toggleOptionB()" id="toggleOptionBButton">Can't Select Folder? Click for Manual Entry</button>
+
+            <div id="optionBContainer" class="option-b-collapsible">
+                <h3>Option B: Manually Enter List</h3>
+                <p class="help-text">If Option A fails or is too slow, you can quickly generate the list:</p>
+               
+                <textarea id="folderNamesInput" placeholder="E.g.:&#10;Counter-Strike 2&#10;Cyberpunk 2077&#10;..."></textarea>
+            </div>
+            
+            <button onclick="checkStep1()" id="nextStep1Button">Confirm Folders and Go to Step 2</button>
+        </div>
+
+        <div id="content2" class="step-content content-section">
+            <h2>Step 2: Scan and AppID Identification</h2>
+            
+            <div id="appIdStatus" class="status-message"></div>
+
+            <button onclick="startIdentify()" id="startIdentify">Identify Games</button>
+            <p class="help-text">Tip: The tool will try to match folder names to AppIDs. If a game is not matched, you will be prompted for manual confirmation.</p>
+            
+            <div class="game-list-container">
+                <div class="detected-header">
+                    <h3 id="detectedCount">Detected Folders 0</h3>
+                </div>
+                
+                <div class="game-list-wrapper">
+                    <table class="game-table">
+                        <thead>
+                            <tr>
+                                <th>Folder Name</th>
+                                <th>Detected Game</th>
+                                <th>App ID</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody id="identificationResults">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <button onclick="checkStep2AndGoToStep3()" id="goToStep3Button">Go to Step 3 (Generate Fix)</button>
+        </div>
+        
+        <div id="content3" class="step-content content-section">
+            <h2>Step 3: Generate and Download Fix</h2>
+            <div id="finalGameCount" class="help-text"></div>
+            
+            <button onclick="startDownload()" id="startDownload">Generate ACF Files and Download (.zip)</button>
+            
+            <div id="statusMessage" class="status-message"></div>
+            
+            <div id="results">
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        This tool runs entirely in your browser. Data is sourced from the open-source <a href="https://github.com/jsnli/steamappidlist" target="_blank" style="color:var(--highlight);">steamappidlist</a> repository.
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    
+    <script src="script.js"></script>
+</body>
+</html>
